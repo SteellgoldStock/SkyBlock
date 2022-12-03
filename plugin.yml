@@ -1,0 +1,6 @@
+name: Faction
+main: steellgold\faction\FactionCore
+version: 1.0.0
+author: Steellgold
+api: [4.0.0]
+description: Faction plugin for PocketMine-MP
