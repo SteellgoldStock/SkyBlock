@@ -23,24 +23,26 @@ class IslandCreateCommand extends BaseSubCommand {
 	 */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 		if (!$sender instanceof Player) return;
-		$island = SkyBlockPlayer::get($sender);
+		$session = SkyBlockPlayer::get($sender);
 
-		if ($island->hasIsland()) {
+		if ($session->hasIsland()) {
 			$sender->sendMessage(TextUtils::error("Vous avez déjà une île, supprimez-la ou transférez-la à un autre joueur, avant de pouvoir en créer une nouvelle."));
 			return;
 		}
 
-		$sender->sendForm(self::createIslandForm());
+		$sender->sendForm(self::createIslandForm($session));
 	}
 
-	public static function createIslandForm() : ModalForm {
+	public static function createIslandForm(SkyBlockPlayer $player) : ModalForm {
 		return new ModalForm(
 			TextUtils::FORM_TITLE,
 			"§d- §rVous êtes sur le point de créer une île. Êtes-vous sûr de vouloir continuer?",
 
-			function(Player $submitter, bool $choice) : void{
+			function(Player $submitter, bool $choice) use ($player) : void{
 				if ($choice) {
+					$player->setIsland(new SkyBlockIsland($submitter->getXuid()));
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île avec succès!"));
+					$submitter->sendMessage("Id de l'île: " . $player->getIsland()->getIdentifier());
 					// TODO: Create island world
 					// TODO: Create island instance
 					// TODO: Teleport player to island
@@ -48,8 +50,8 @@ class IslandCreateCommand extends BaseSubCommand {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la création de votre île."));
 				}
 			},
-			"YES",
-			"NO"
+			"Oui",
+			"§cAnnuler"
 		);
 	}
 }
