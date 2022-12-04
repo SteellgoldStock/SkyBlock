@@ -7,7 +7,6 @@ use dktapps\pmforms\ModalForm;
 use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
-use pocketmine\Server;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\TextUtils;
@@ -35,14 +34,13 @@ class IslandCreateCommand extends BaseSubCommand {
 
 	public static function createIslandForm(SkyBlockPlayer $player) : ModalForm {
 		return new ModalForm(
-			TextUtils::FORM_TITLE,
+			TextUtils::FORM_TITLE_MODAL,
 			"§d- §rVous êtes sur le point de créer une île. Êtes-vous sûr de vouloir continuer?",
 
 			function(Player $submitter, bool $choice) use ($player) : void{
 				if ($choice) {
 					$player->setIsland(new SkyBlockIsland($submitter->getXuid()));
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île avec succès!"));
-					$submitter->sendMessage("Id de l'île: " . $player->getIsland()->getIdentifier());
 					// TODO: Create island world
 					// TODO: Create island instance
 					// TODO: Teleport player to island
