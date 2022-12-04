@@ -6,9 +6,7 @@ class TextUtils {
 	const PREFIX = "§dSkyBlock §f» ";
 	const ERROR = "§cErreur §f» ";
 
-	public static function getPrefix(): string {
-		return self::PREFIX;
-	}
+	const FORM_TITLE = "§d- SkyBlock -";
 
 	public static function getNoPermissionMessage(): string {
 		return self::PREFIX . "§cVous n'avez pas la permission d'utiliser cette commande.";
