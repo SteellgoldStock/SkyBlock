@@ -1,6 +1,8 @@
 name: Faction
-main: steellgold\faction\FactionCore
+main: steellgold\skyblock\SkyBlock
 version: 1.0.0
-author: Steellgold
+authors:
+  - Steellgold
+  - Azalee
 api: [4.0.0]
-description: Faction plugin for PocketMine-MP
+description: SkyBlock plugin for PocketMine-MP
