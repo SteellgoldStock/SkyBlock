@@ -22,7 +22,7 @@ class IslandCommand extends BaseCommand {
 		if (!$sender instanceof Player) return;
 		$session = SkyBlockPlayer::get($sender);
 		if (!$session->hasIsland()) {
-
+			$sender->sendForm(IslandCreateCommand::createIslandForm($session));
 		}
 	}
 }
