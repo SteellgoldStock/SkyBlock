@@ -39,7 +39,7 @@ class IslandCreateCommand extends BaseSubCommand {
 
 			function(Player $submitter, bool $choice) use ($player) : void{
 				if ($choice) {
-					$player->setIsland(new SkyBlockIsland($submitter->getXuid()));
+					$player->setIsland(new SkyBlockIsland($submitter->getXuid(), $submitter->getName(), [$submitter->getName()]));
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île avec succès!"));
 					// TODO: Create island world
 					// TODO: Create island instance
