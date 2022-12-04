@@ -7,6 +7,7 @@ class TextUtils {
 	const ERROR = "§cErreur §f» ";
 
 	const FORM_TITLE = "§d- SkyBlock -";
+	const FORM_TITLE_MODAL = "SkyBlock";
 
 	public static function getNoPermissionMessage(): string {
 		return self::PREFIX . "§cVous n'avez pas la permission d'utiliser cette commande.";
