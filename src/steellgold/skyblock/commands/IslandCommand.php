@@ -7,12 +7,14 @@ use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use steellgold\skyblock\commands\subs\IslandCreateCommand;
+use steellgold\skyblock\commands\subs\IslandDisbandCommand;
 use steellgold\skyblock\player\SkyBlockPlayer;
 
 class IslandCommand extends BaseCommand {
 
 	protected function prepare(): void {
 		$this->registerSubCommand(new IslandCreateCommand("create", "Create a new island"));
+		$this->registerSubCommand(new IslandDisbandCommand("disband", "Disband your island"));
 	}
 
 	/**
