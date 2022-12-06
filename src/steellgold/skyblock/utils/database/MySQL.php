@@ -23,5 +23,11 @@ class MySQL {
 			player VARCHAR(100),
 			island VARCHAR(100) DEFAULT null
 		)");
+
+		$mysqli->query("CREATE TABLE IF NOT EXISTS islands (
+			id INT PRIMARY KEY NOT NULL,
+			owner VARCHAR(100) NOT NULL,
+			members VARCHAR(100) NOT NULL
+		)");
 	}
 }
