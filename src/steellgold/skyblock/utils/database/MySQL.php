@@ -17,7 +17,7 @@ class MySQL {
 		);
 	}
 
-	public static function createTable(\mysqli $mysqli): void {
+	public static function default(\mysqli $mysqli): void {
 		$mysqli->query("CREATE TABLE IF NOT EXISTS players (
 			id INT PRIMARY KEY NOT NULL,
 			player VARCHAR(100),
