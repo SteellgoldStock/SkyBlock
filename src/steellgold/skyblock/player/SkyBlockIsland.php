@@ -23,16 +23,18 @@ final class SkyBlockIsland {
 	/** @throws Exception */
 	private static function loadSessionData(Player $player) : SkyBlockIsland {
 		// TODO: Load data from database
-		return new SkyBlockIsland($player->getXuid(), $player->getName(), [$player->getName()]);
+		return new SkyBlockIsland($player->getXuid(), $player->getName(), $player->getName(), [$player->getName()]);
 	}
 
 	/**
 	 * @param int $identifier
+	 * @param string $island_name
 	 * @param string $owner
 	 * @param string[] $members
 	 */
 	public function __construct(
 		private int $identifier,
+		private string $island_name,
 		private string $owner,
 		private array $members
 	){ }
@@ -45,6 +47,16 @@ final class SkyBlockIsland {
 	/** @param int $identifier */
 	private function setIdentifier(int $identifier): void {
 		$this->identifier = $identifier;
+	}
+
+	/** @return string */
+	public function getIslandName(): string {
+		return $this->island_name;
+	}
+
+	/** @param string $island_name */
+	public function setIslandName(string $island_name): void {
+		$this->island_name = $island_name;
 	}
 
 	/** @return string */
