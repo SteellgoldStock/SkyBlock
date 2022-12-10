@@ -3,6 +3,9 @@
 namespace steellgold\skyblock\commands\subs;
 
 use CortexPE\Commando\BaseSubCommand;
+use dktapps\pmforms\CustomForm;
+use dktapps\pmforms\element\Input;
+use dktapps\pmforms\element\Label;
 use dktapps\pmforms\ModalForm;
 use Exception;
 use pocketmine\command\CommandSender;
@@ -50,6 +53,18 @@ class IslandCreateCommand extends BaseSubCommand {
 			},
 			"Oui",
 			"§cAnnuler"
+		);
+	}
+
+	public static function chooseIslandNameForm(Player $player) : CustomForm {
+		return new CustomForm(
+			TextUtils::FORM_TITLE, [
+				new Label("description", "Choisissez un nom pour votre île, si vous ne le faites pas, votre pseudo sera utilisé."),
+				new Input("name", "Nom de l'île", "Super île de " . $player->getName())
+			],
+			function(Player $submitter, array $data) : void{
+				$submitter->sendMessage(TextUtils::text("Vous avez choisi le nom de votre île: " . $data["name"]));
+			}
 		);
 	}
 }
