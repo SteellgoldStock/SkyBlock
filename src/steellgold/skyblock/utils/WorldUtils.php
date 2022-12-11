@@ -167,27 +167,4 @@ class WorldUtils {
 
 		return Server::getInstance()->getWorldManager()->getWorldByName($name);
 	}
-
-	/**
-	 * @phpstan-return GeneratorManagerEntry|null
-	 */
-	public static function getGeneratorByName(string $name): ?GeneratorManagerEntry {
-		$name = match(strtolower($name)) {
-			// 'Vanilla' generators...
-			"normal", "classic", "basic", "vanilla" => "vanilla_normal",
-			"nether", "hell" => "vanilla_nether",
-			"ender", "end" => "ender",
-			"superflat", "flat" => "flat",
-			// PocketMine generators
-			"nether_old" => "nether",
-			"normal_old" => "normal",
-			// Custom generators
-			"skyblock","sb" => "skyblock",
-			"void", "empty", "emptyworld" => "void",
-			// Other generators
-			default => strtolower($name)
-		};
-
-		return GeneratorManager::getInstance()->getGenerator($name);
-	}
 }
