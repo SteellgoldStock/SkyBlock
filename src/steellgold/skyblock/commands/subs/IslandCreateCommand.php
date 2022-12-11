@@ -4,6 +4,7 @@ namespace steellgold\skyblock\commands\subs;
 
 use CortexPE\Commando\BaseSubCommand;
 use dktapps\pmforms\CustomForm;
+use dktapps\pmforms\CustomFormResponse;
 use dktapps\pmforms\element\Input;
 use dktapps\pmforms\element\Label;
 use dktapps\pmforms\ModalForm;
@@ -42,10 +43,11 @@ class IslandCreateCommand extends BaseSubCommand {
 
 			function(Player $submitter, bool $choice) use ($player) : void{
 				if ($choice) {
-					$player->setIsland(new SkyBlockIsland($submitter->getXuid(), $submitter->getName(), [$submitter->getName()]));
-					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île avec succès!"));
+					$island = new SkyBlockIsland($submitter->getXuid(), $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
+					$player->setIsland($island);
+					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" .  $island->getIslandName() ." §f» avec succès!"));
+					$submitter->sendForm(self::chooseIslandNameForm($submitter, $island));
 					// TODO: Create island world
-					// TODO: Create island instance
 					// TODO: Teleport player to island
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la création de votre île."));
@@ -56,14 +58,19 @@ class IslandCreateCommand extends BaseSubCommand {
 		);
 	}
 
-	public static function chooseIslandNameForm(Player $player) : CustomForm {
+	public static function chooseIslandNameForm(Player $player, SkyBlockIsland $island) : CustomForm {
 		return new CustomForm(
 			TextUtils::FORM_TITLE, [
-				new Label("description", "Choisissez un nom pour votre île, si vous ne le faites pas, votre pseudo sera utilisé."),
+				new Label("description", "Choisissez un nom pour votre île, si vous ne le faites pas alors votre pseudo sera utilisé.\n\nVous pourrez très bien le changer à tout moment via la commande §d/is rename <nom>§r."),
 				new Input("name", "Nom de l'île", "Super île de " . $player->getName())
 			],
-			function(Player $submitter, array $data) : void{
-				$submitter->sendMessage(TextUtils::text("Vous avez choisi le nom de votre île: " . $data["name"]));
+			function(Player $submitter, CustomFormResponse $data) : void{
+				$island = SkyBlockPlayer::get($submitter)->getIsland();
+				$island->setIslandName($data->getString("name"));
+				$submitter->sendMessage(TextUtils::text("Vous venez de renommer votre île en §d" . $island->getIslandName() . "§r."));
+			},
+			function(Player $submitter) : void{
+				$submitter->sendMessage(TextUtils::error("Vous avez annulé le choix du nom de votre île. Elle sera donc nommée §fIle de " . $submitter->getName() . "§r."));
 			}
 		);
 	}
