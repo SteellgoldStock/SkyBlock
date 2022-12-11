@@ -28,7 +28,7 @@ class SkyBlock extends PluginBase {
 
 		$this->saveResource("config.yml");
 		$this->mysql = MySQL::mysqli();
-		MySQL::createTable($this->mysql);
+		MySQL::default($this->mysql);
 
 		$this->getServer()->getCommandMap()->register("skyblock", new IslandCommand($this, "island", "Commande principale du SkyBlock", ["is"]));
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerListeners(), $this);
