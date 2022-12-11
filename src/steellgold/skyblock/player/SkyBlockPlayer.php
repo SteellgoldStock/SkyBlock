@@ -4,18 +4,20 @@ namespace steellgold\skyblock\player;
 
 use Exception;
 use pocketmine\player\Player;
+use steellgold\skyblock\utils\database\MySQL;
 use WeakMap;
 
 final class SkyBlockPlayer {
 
 	/**
-	 * @param int $identifier
+	 * @param string $name
 	 * @param SkyBlockIsland|null $island
 	 */
 	public function __construct(
-		private int $identifier,
+		private string $name,
 		private ?SkyBlockIsland $island
-	){ }
+	) {
+	}
 
 	/**
 	 * @var WeakMap
@@ -24,20 +26,24 @@ final class SkyBlockPlayer {
 	private static WeakMap $data;
 
 	/** @throws Exception */
-	public static function get(Player $player) : SkyBlockPlayer {
+	public static function get(Player $player): SkyBlockPlayer {
 		self::$data ??= new WeakMap();
 
 		return self::$data[$player] ??= self::loadSessionData($player);
 	}
 
 	/** @throws Exception */
-	private static function loadSessionData(Player $player) : SkyBlockPlayer {
-		return new SkyBlockPlayer($player->getXuid(), null);
+	private static function loadSessionData(Player $player): SkyBlockPlayer {
+		if (!$player->hasPlayedBefore()) {
+			MySQL::mysqli()->query("INSERT INTO players (player, island) VALUES ('{$player->getName()}', 'null')");
+		}
+
+		return new SkyBlockPlayer($player->getName(), null);
 	}
 
-	/** @return int */
-	public function getIdentifier() : int{
-		return $this->identifier;
+	/** @return string */
+	public function getName(): string {
+		return $this->name;
 	}
 
 	/** @param SkyBlockIsland|null $island */

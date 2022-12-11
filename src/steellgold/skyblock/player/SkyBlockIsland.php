@@ -3,49 +3,42 @@
 namespace steellgold\skyblock\player;
 
 use Exception;
-use pocketmine\player\Player;
+use steellgold\skyblock\utils\database\MySQL;
 use WeakMap;
 
 final class SkyBlockIsland {
-	/**
-	 * @var WeakMap
-	 * @phpstan-var WeakMap<Player, SkyBlockIsland>
-	 */
-	private static WeakMap $data;
+
+	public static $islands = [];
 
 	/** @throws Exception */
-	public static function get(Player $player) : SkyBlockIsland {
-		self::$data ??= new WeakMap();
-
-		return self::$data[$player] ??= self::loadSessionData($player);
-	}
-
-	/** @throws Exception */
-	private static function loadSessionData(Player $player) : SkyBlockIsland {
-		// TODO: Load data from database
-		return new SkyBlockIsland($player->getXuid(), $player->getName(), $player->getName(), [$player->getName()]);
+	private static function loadSessionData(string $uuid): SkyBlockIsland {
+		$data = MySQL::mysqli()->query("SELECT * FROM islands WHERE uuid = '$uuid'")->fetch_assoc();
+		var_dump($data);
+		// return new SkyBlockIsland($player->getXuid(), $player->getName(), $player->getName(), [$player->getName()]);
+		return new SkyBlockIsland("cc","aaz","az",[]);
 	}
 
 	/**
-	 * @param int $identifier
+	 * @param string $identifier
 	 * @param string $island_name
 	 * @param string $owner
 	 * @param string[] $members
 	 */
 	public function __construct(
-		private int $identifier,
+		private string $identifier,
 		private string $island_name,
 		private string $owner,
-		private array $members
-	){ }
+		private array  $members
+	) {
+	}
 
-	/** @return int */
-	public function getIdentifier() : int{
+	/** @return string */
+	public function getIdentifier(): string {
 		return $this->identifier;
 	}
 
-	/** @param int $identifier */
-	private function setIdentifier(int $identifier): void {
+	/** @param string $identifier */
+	private function setIdentifier(string $identifier): void {
 		$this->identifier = $identifier;
 	}
 
