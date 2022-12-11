@@ -3,6 +3,7 @@
 namespace steellgold\skyblock\utils\database;
 
 use steellgold\skyblock\SkyBlock;
+
 class MySQL {
 
 	public static function mysqli(): \mysqli {
@@ -18,13 +19,13 @@ class MySQL {
 
 	public static function default(\mysqli $mysqli): void {
 		$mysqli->query("CREATE TABLE IF NOT EXISTS players (
-			id INT PRIMARY KEY NOT NULL,
+			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			player VARCHAR(100),
 			island VARCHAR(100) DEFAULT null
 		)");
 
 		$mysqli->query("CREATE TABLE IF NOT EXISTS islands (
-			id INT PRIMARY KEY NOT NULL,
+			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			owner VARCHAR(100) NOT NULL,
 			members VARCHAR(100) NOT NULL
 		)");
