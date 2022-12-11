@@ -26,6 +26,8 @@ class MySQL {
 
 		$mysqli->query("CREATE TABLE IF NOT EXISTS islands (
 			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+			uuid VARCHAR(100) NOT NULL,
+    		public_name VARCHAR(100) NOT NULL,
 			owner VARCHAR(100) NOT NULL,
 			members VARCHAR(100) NOT NULL
 		)");

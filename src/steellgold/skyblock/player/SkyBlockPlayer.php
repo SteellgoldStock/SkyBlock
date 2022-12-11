@@ -14,7 +14,7 @@ final class SkyBlockPlayer {
 	 * @param SkyBlockIsland|null $island
 	 */
 	public function __construct(
-		private string $name,
+		private string          $name,
 		private ?SkyBlockIsland $island
 	) {
 	}
@@ -38,7 +38,14 @@ final class SkyBlockPlayer {
 			MySQL::mysqli()->query("INSERT INTO players (player, island) VALUES ('{$player->getName()}', 'null')");
 		}
 
-		return new SkyBlockPlayer($player->getName(), null);
+		$data = MySQL::mysqli()->query("SELECT * FROM players WHERE player = '{$player->getName()}'")->fetch_assoc();
+
+		$island = null;
+		if ($data["island"] !== "null") {
+			$island = SkyBlockIsland::loadIslandSession($data["island"]);
+		}
+
+		return new SkyBlockPlayer($player->getName(), $island);
 	}
 
 	/** @return string */
@@ -54,6 +61,10 @@ final class SkyBlockPlayer {
 	/** @return SkyBlockIsland|null */
 	public function getIsland(): ?SkyBlockIsland {
 		return $this->island;
+	}
+
+	public function getIslandIdentifier(): ?string {
+		return $this->island !== null ? $this->island->getIdentifier() : "null";
 	}
 
 	public function hasIsland(): bool {
