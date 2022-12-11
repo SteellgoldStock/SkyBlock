@@ -8,6 +8,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use steellgold\skyblock\player\SkyBlockPlayer;
+use steellgold\skyblock\utils\database\MySQL;
 
 class PlayerListeners implements Listener {
 
@@ -26,6 +27,8 @@ class PlayerListeners implements Listener {
 	public function onPlayerQuit(PlayerQuitEvent $event) {
 		$player = $event->getPlayer();
 		$session = SkyBlockPlayer::get($player);
+
+		MySQL::mysqli()->query("UPDATE players SET island = '{$session->getIslandIdentifier()}' WHERE player = '{$player->getName()}'");
 	}
 
 	public function onPlayerMove(PlayerMoveEvent $event) {
