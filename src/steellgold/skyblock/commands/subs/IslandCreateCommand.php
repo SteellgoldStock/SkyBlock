@@ -15,6 +15,7 @@ use pocketmine\player\Player;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\TextUtils;
+use steellgold\skyblock\utils\UUID;
 use steellgold\skyblock\utils\WorldUtils;
 
 class IslandCreateCommand extends BaseSubCommand {
@@ -45,14 +46,18 @@ class IslandCreateCommand extends BaseSubCommand {
 
 			function (Player $submitter, bool $choice) use ($player): void {
 				if ($choice) {
-					$island = new SkyBlockIsland($submitter->getXuid(), $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
+					$uuid = (new UUID())->generate();
+
+					// $island = SkyBlockIsland::get($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
+					$island = SkyBlockIsland::get($uuid);
 					$player->setIsland($island);
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
 					$submitter->sendForm(self::chooseIslandNameForm($submitter, $island));
 
-					WorldUtils::duplicateWorld("copypaste", $submitter->getXuid());
-					$world = WorldUtils::getLoadedWorldByName($submitter->getXuid());
+					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
+					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
 					$world->setSpawnLocation(new Vector3(256, 71, 256));
+
 					if (WorldUtils::lazyLoadWorld("copypaste")) {
 						$submitter->teleport($world->getSpawnLocation());
 					} else {
