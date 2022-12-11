@@ -8,14 +8,26 @@ use WeakMap;
 
 final class SkyBlockIsland {
 
-	public static $islands = [];
+	public static array $islands = [];
 
-	/** @throws Exception */
-	private static function loadSessionData(string $uuid): SkyBlockIsland {
-		$data = MySQL::mysqli()->query("SELECT * FROM islands WHERE uuid = '$uuid'")->fetch_assoc();
-		var_dump($data);
+	/**
+	 * @param string $uuid
+	 * @return SkyBlockIsland|null
+	 * @throws Exception
+	 */
+	public static function loadIslandSession(string $uuid): ?SkyBlockIsland {
+		$data = MySQL::mysqli()->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
+		if (!$data) {
+			return null;
+		} else {
+			$data = $data->fetch_assoc();
+			return new SkyBlockIsland($data["uuid"], $data["public_name"], $data["owner"], []);
+		}
+
+		// $island = new SkyBlockIsland($data['uuid'],"aaz","az",[]);
+		// self::$islands[$uuid] = $island;
 		// return new SkyBlockIsland($player->getXuid(), $player->getName(), $player->getName(), [$player->getName()]);
-		return new SkyBlockIsland("cc","aaz","az",[]);
+		// return $island;
 	}
 
 	/**
