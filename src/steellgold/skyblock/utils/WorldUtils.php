@@ -6,8 +6,6 @@ use FilesystemIterator;
 use pocketmine\Server;
 use pocketmine\utils\AssumptionFailedError;
 use pocketmine\world\format\io\data\BaseNbtWorldData;
-use pocketmine\world\generator\GeneratorManager;
-use pocketmine\world\generator\GeneratorManagerEntry;
 use pocketmine\world\World;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

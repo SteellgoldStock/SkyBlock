@@ -3,7 +3,6 @@
 namespace steellgold\skyblock\utils\database;
 
 use steellgold\skyblock\SkyBlock;
-
 class MySQL {
 
 	public static function mysqli(): \mysqli {

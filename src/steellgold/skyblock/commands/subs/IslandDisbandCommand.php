@@ -7,7 +7,6 @@ use dktapps\pmforms\ModalForm;
 use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
-use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\WorldUtils;
