@@ -72,7 +72,7 @@ class IslandCreateCommand extends BaseSubCommand {
 		);
 	}
 
-	public static function chooseIslandNameForm(Player $player, SkyBlockIsland $island): CustomForm {
+	public static function chooseIslandNameForm(Player $player): CustomForm {
 		return new CustomForm(
 			TextUtils::FORM_TITLE, [
 			new Label("description", "Choisissez un nom pour votre île, si vous ne le faites pas alors votre pseudo sera utilisé.\n\nVous pourrez très bien le changer à tout moment via la commande §d/is rename <nom>§r."),
