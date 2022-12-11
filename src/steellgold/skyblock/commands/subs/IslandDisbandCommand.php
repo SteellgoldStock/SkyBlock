@@ -10,6 +10,7 @@ use pocketmine\player\Player;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\TextUtils;
+use steellgold\skyblock\utils\WorldUtils;
 
 class IslandDisbandCommand extends BaseSubCommand {
 
@@ -32,18 +33,19 @@ class IslandDisbandCommand extends BaseSubCommand {
 		$sender->sendForm(self::disbandIslandForm($session));
 	}
 
-	public static function disbandIslandForm(SkyBlockPlayer $player) : ModalForm {
+	public static function disbandIslandForm(SkyBlockPlayer $player): ModalForm {
 		return new ModalForm(
 			TextUtils::FORM_TITLE_MODAL,
 			"§d- §rVous êtes sur le point de supprimer votre île. Êtes-vous sûr de vouloir continuer? ceci est irréversible.",
 
-			function(Player $submitter, bool $choice) use ($player) : void{
+			function (Player $submitter, bool $choice) use ($player): void {
 				if ($choice) {
+					$world = WorldUtils::getLoadedWorldByName($submitter->getXuid());
+					WorldUtils::lazyUnloadWorld($world);
+					WorldUtils::removeWorld($submitter->getXuid());
+
 					$player->setIsland(null);
 					$submitter->sendMessage(TextUtils::text("Vous venez de supprimer votre île avec succès!"));
-					// TODO: Delete island world
-					// TODO: Delete island instance
-					// TODO: Teleport player to server spawn
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la suppression de votre île."));
 				}
