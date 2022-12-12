@@ -32,4 +32,9 @@ class MySQL {
 			members VARCHAR(100) NOT NULL
 		)");
 	}
+
+	public static function updateIsland($column, $value, $uuid): void {
+		$mysqli = self::mysqli();
+		$mysqli->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
+	}
 }
