@@ -47,6 +47,8 @@ class IslandDisbandCommand extends BaseSubCommand {
 
 					MySQL::removeIsland($island->getIdentifier());
 					$submitter->sendMessage(TextUtils::text("Vous venez de supprimer votre île avec succès!"));
+					$submitter->teleport(WorldUtils::getDefaultWorldNonNull()->getSpawnLocation());
+					$submitter->getInventory()->clearAll();
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la suppression de votre île."));
 				}
