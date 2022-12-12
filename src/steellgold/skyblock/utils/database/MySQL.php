@@ -5,29 +5,34 @@ namespace steellgold\skyblock\utils\database;
 use steellgold\skyblock\SkyBlock;
 
 class MySQL {
-
-	public static function mysqli(): \mysqli {
+	private static \mysqli $mysqli;
+	public function __construct() {
 		$config = SkyBlock::getInstance()->getConfig();
-		return new \mysqli(
+		self::$mysqli = new \mysqli(
 			$config->get("database")["host"],
 			$config->get("database")["username"],
 			$config->get("database")["password"],
 			$config->get("database")["database"],
 			$config->get("database")["port"]
 		);
+		self::default();
 	}
 
-	public static function default(\mysqli $mysqli): void {
-		$mysqli->query("CREATE TABLE IF NOT EXISTS players (
+	public static function mysqli(): \mysqli {
+		return self::$mysqli;
+	}
+
+	public static function default(): void {
+		self::mysqli()->query("CREATE TABLE IF NOT EXISTS players (
 			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			player VARCHAR(100),
 			island VARCHAR(100) DEFAULT null
 		)");
 
-		$mysqli->query("CREATE TABLE IF NOT EXISTS islands (
+		self::mysqli()->query("CREATE TABLE IF NOT EXISTS islands (
 			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			uuid VARCHAR(100) NOT NULL,
-    		public_name VARCHAR(100) NOT NULL,
+    		island_name VARCHAR(100) NOT NULL,
 			owner VARCHAR(100) NOT NULL,
 			members JSON NOT NULL
 		)");
@@ -41,5 +46,10 @@ class MySQL {
 	public static function updateIsland($column, $value, $uuid): void {
 		$mysqli = self::mysqli();
 		$mysqli->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
+	}
+
+	public static function updatePlayer($column, $value, $player): void {
+		$mysqli = self::mysqli();
+		$mysqli->query("UPDATE players SET {$column} = '{$value}' WHERE player = '{$player}'");
 	}
 }

@@ -14,7 +14,7 @@ final class SkyBlockPlayer {
 	 * @param SkyBlockIsland|null $island
 	 */
 	public function __construct(
-		private string          $name,
+		private readonly string $name,
 		private ?SkyBlockIsland $island
 	) {
 	}
@@ -55,6 +55,7 @@ final class SkyBlockPlayer {
 
 	/** @param SkyBlockIsland|null $island */
 	public function setIsland(?SkyBlockIsland $island): void {
+		MySQL::updatePlayer("island", $island === null ? "null" : $island->getIdentifier(), $this->getName());
 		$this->island = $island;
 	}
 

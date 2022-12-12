@@ -12,8 +12,6 @@ use steellgold\skyblock\utils\database\MySQL;
 
 class SkyBlock extends PluginBase {
 
-	public mysqli $mysql;
-
 	public static SkyBlock $instance;
 
 	/**
@@ -27,8 +25,7 @@ class SkyBlock extends PluginBase {
 		}
 
 		$this->saveResource("config.yml");
-		$this->mysql = MySQL::mysqli();
-		MySQL::default($this->mysql);
+		new MySQL();
 
 		$this->getServer()->getCommandMap()->register("skyblock", new IslandCommand($this, "island", "Commande principale du SkyBlock", ["is"]));
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerListeners(), $this);
@@ -37,10 +34,5 @@ class SkyBlock extends PluginBase {
 	/** @return SkyBlock */
 	public static function getInstance(): SkyBlock {
 		return self::$instance;
-	}
-
-	/** @return mysqli */
-	public function getMySQL(): mysqli {
-		return $this->mysql;
 	}
 }
