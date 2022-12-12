@@ -40,7 +40,7 @@ class AllEntitiesSelector extends BaseSelector {
 
 	public function getTargets(CommandSender $sender, array $args): array {
 		$entities = [];
-		foreach($sender->getServer()->getLevels() as $level) {
+		foreach($sender->getServer()->getWorldManager()->getWorlds() as $level) {
 			$entities = array_merge($entities, $level->getEntities());
 		}
 

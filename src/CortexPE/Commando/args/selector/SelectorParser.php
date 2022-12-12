@@ -44,7 +44,7 @@ class SelectorParser {
 	private $selRegex = "";
 
 	public function registerSelector(BaseSelector $selector):void {
-		$c = strtolower($selector->getChar(){0});
+		$c = strtolower($selector->getChar()[0]);
 		if(!isset($this->selectors[$c])){
 			$this->selectors[$c] = $selector;
 		}

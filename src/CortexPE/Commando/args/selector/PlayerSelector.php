@@ -31,8 +31,8 @@ namespace CortexPE\Commando\args\selector;
 
 
 use pocketmine\command\CommandSender;
-use pocketmine\level\Position;
-use pocketmine\Player;
+use pocketmine\player\Player;
+use pocketmine\world\Position;
 
 class PlayerSelector extends BaseSelector {
 	public function getChar(): string {
@@ -42,7 +42,7 @@ class PlayerSelector extends BaseSelector {
 	public function getTargets(CommandSender $sender, array $args): array {
 		if($sender instanceof Position) {
 			return [
-				$sender->getLevel()->getNearestEntity(
+				$sender->getWorld()->getNearestEntity(
 					$sender, PHP_INT_MAX, Player::class, true
 				)
 			];

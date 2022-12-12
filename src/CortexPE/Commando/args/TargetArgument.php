@@ -66,7 +66,7 @@ class TargetArgument extends BaseArgument {
 		return $this->parser->isValid($sender, $testString);
 	}
 
-	public function parse(string $argument, CommandSender $sender) {
+	public function parse(string $argument, CommandSender $sender) : array {
 		return $this->parser->parse($sender, $argument);
 	}
 }

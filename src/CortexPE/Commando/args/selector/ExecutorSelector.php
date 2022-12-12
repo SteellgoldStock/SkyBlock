@@ -31,8 +31,6 @@ namespace CortexPE\Commando\args\selector;
 
 
 use pocketmine\command\CommandSender;
-use pocketmine\level\Position;
-use pocketmine\Player;
 
 class ExecutorSelector extends BaseSelector {
 	public function getChar(): string {
