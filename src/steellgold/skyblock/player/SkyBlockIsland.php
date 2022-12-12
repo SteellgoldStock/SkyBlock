@@ -61,6 +61,7 @@ final class SkyBlockIsland {
 
 	/** @param string $island_name */
 	public function setIslandName(string $island_name): void {
+		MySQL::updateIsland("public_name", $island_name, $this->identifier);
 		$this->island_name = $island_name;
 	}
 
@@ -71,6 +72,7 @@ final class SkyBlockIsland {
 
 	/** @param string $owner */
 	public function setOwner(string $owner): void {
+		MySQL::updateIsland("owner", $owner, $this->identifier);
 		$this->owner = $owner;
 	}
 
