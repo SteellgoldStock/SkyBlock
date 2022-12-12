@@ -3,10 +3,6 @@
 namespace steellgold\skyblock\commands\subs;
 
 use CortexPE\Commando\BaseSubCommand;
-use dktapps\pmforms\CustomForm;
-use dktapps\pmforms\CustomFormResponse;
-use dktapps\pmforms\element\Input;
-use dktapps\pmforms\element\Label;
 use dktapps\pmforms\ModalForm;
 use Exception;
 use pocketmine\command\CommandSender;
@@ -54,14 +50,10 @@ class IslandCreateCommand extends BaseSubCommand {
 
 					$player->setIsland($island);
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
-					$submitter->sendForm(self::chooseIslandNameForm($submitter));
 
 					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
 					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
 					$world->setSpawnLocation(new Vector3(256, 71, 256));
-
-					if (WorldUtils::lazyLoadWorld("copypaste")) {
-						$submitter->teleport($world->getSpawnLocation());
 					} else {
 						$submitter->sendMessage(TextUtils::error("Une erreur est survenue lors du téléportation sur votre île."));
 					}

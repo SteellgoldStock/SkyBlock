@@ -3,6 +3,7 @@
 namespace steellgold\skyblock\commands\subs;
 
 use CortexPE\Commando\BaseSubCommand;
+use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use steellgold\skyblock\player\SkyBlockPlayer;
@@ -14,6 +15,9 @@ class IslandNameCommand extends BaseSubCommand {
 		// TODO: Implement prepare() method.
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 		if (!$sender instanceof Player) return;
 		$session = SkyBlockPlayer::get($sender);
