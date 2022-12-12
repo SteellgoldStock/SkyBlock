@@ -42,9 +42,11 @@ class IslandRenameCommand extends BaseSubCommand {
 					return;
 				}
 
+				$new_name = str_replace(["'"], ["''"], $response->getString("name"));
+
 				$session = SkyBlockPlayer::get($player);
-				$session->getIsland()->setIslandName($response->getString("name"));
-				$player->sendMessage(TextUtils::text("Vous venez de renommer votre île en « §d" . $response->getString("name") . " §f» avec succès!"));
+				$session->getIsland()->setIslandName($new_name);
+				$player->sendMessage(TextUtils::text("Vous venez de renommer votre île en « §d{$response->getString("name")} §f» avec succès!"));
 			},
 			function (Player $player) : void {
 				$player->sendMessage(TextUtils::error("Vous avez annulé la modification du nom de votre île."));
