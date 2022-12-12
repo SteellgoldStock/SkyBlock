@@ -14,7 +14,7 @@ final class SkyBlockPlayer {
 	 * @param SkyBlockIsland|null $island
 	 */
 	public function __construct(
-		private readonly string $name,
+		private string          $name,
 		private ?SkyBlockIsland $island
 	) {
 	}
@@ -51,6 +51,10 @@ final class SkyBlockPlayer {
 	/** @return string */
 	public function getName(): string {
 		return $this->name;
+	}
+
+	private function setName(string $name): void {
+		$this->name = $name;
 	}
 
 	/** @param SkyBlockIsland|null $island */
