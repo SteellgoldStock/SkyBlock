@@ -30,28 +30,13 @@ declare(strict_types=1);
 namespace CortexPE\Commando\args;
 
 
-use CortexPE\Commando\args\selector\AllEntitiesSelector;
-use CortexPE\Commando\args\selector\AllPlayersSelector;
-use CortexPE\Commando\args\selector\ExecutorSelector;
-use CortexPE\Commando\args\selector\PlayerSelector;
-use CortexPE\Commando\args\selector\RandomPlayerSelector;
-use CortexPE\Commando\args\selector\SelectorParser;
 use pocketmine\command\CommandSender;
 use pocketmine\network\mcpe\protocol\AvailableCommandsPacket;
 
 class TargetArgument extends BaseArgument {
-	/** @var SelectorParser */
-	private $parser;
 
-	public function __construct(string $name, bool $optional) {
+	public function __construct(string $name, bool $optional = false) {
 		parent::__construct($name, $optional);
-
-		$this->parser = new SelectorParser();
-		$this->parser->registerSelector(new AllEntitiesSelector());
-		$this->parser->registerSelector(new AllPlayersSelector());
-		$this->parser->registerSelector(new ExecutorSelector());
-		$this->parser->registerSelector(new PlayerSelector());
-		$this->parser->registerSelector(new RandomPlayerSelector());
 	}
 
 	public function getNetworkType(): int {
@@ -63,10 +48,10 @@ class TargetArgument extends BaseArgument {
 	}
 
 	public function canParse(string $testString, CommandSender $sender): bool {
-		return $this->parser->isValid($sender, $testString);
+		return true;
 	}
 
-	public function parse(string $argument, CommandSender $sender) : array {
-		return $this->parser->parse($sender, $argument);
+	public function parse(string $argument, CommandSender $sender): string {
+		return $argument;
 	}
 }
