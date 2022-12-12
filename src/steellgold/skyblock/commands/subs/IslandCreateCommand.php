@@ -54,32 +54,13 @@ class IslandCreateCommand extends BaseSubCommand {
 					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
 					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
 					$world->setSpawnLocation(new Vector3(256, 71, 256));
-					} else {
-						$submitter->sendMessage(TextUtils::error("Une erreur est survenue lors du téléportation sur votre île."));
-					}
+					$submitter->teleport($world->getSpawnLocation());
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la création de votre île."));
 				}
 			},
 			"Oui",
 			"§cAnnuler"
-		);
-	}
-
-	public static function chooseIslandNameForm(Player $player): CustomForm {
-		return new CustomForm(
-			TextUtils::FORM_TITLE, [
-			new Label("description", "Choisissez un nom pour votre île, si vous ne le faites pas alors votre pseudo sera utilisé.\n\nVous pourrez très bien le changer à tout moment via la commande §d/is rename <nom>§r."),
-			new Input("name", "Nom de l'île", "Super île de " . $player->getName())
-		],
-			function (Player $submitter, CustomFormResponse $data): void {
-				$island = SkyBlockPlayer::get($submitter)->getIsland();
-				$island->setIslandName($data->getString("name"));
-				$submitter->sendMessage(TextUtils::text("Vous venez de renommer votre île en §d" . $island->getIslandName() . "§r."));
-			},
-			function (Player $submitter): void {
-				$submitter->sendMessage(TextUtils::error("Vous avez annulé le choix du nom de votre île. Elle sera donc nommée §fIle de " . $submitter->getName() . "§r."));
-			}
 		);
 	}
 }
