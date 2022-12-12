@@ -23,11 +23,6 @@ final class SkyBlockIsland {
 			$data = $data->fetch_assoc();
 			return new SkyBlockIsland($data["uuid"], $data["public_name"], $data["owner"], []);
 		}
-
-		// $island = new SkyBlockIsland($data['uuid'],"aaz","az",[]);
-		// self::$islands[$uuid] = $island;
-		// return new SkyBlockIsland($player->getXuid(), $player->getName(), $player->getName(), [$player->getName()]);
-		// return $island;
 	}
 
 	/**

@@ -48,7 +48,6 @@ class IslandCreateCommand extends BaseSubCommand {
 				if ($choice) {
 					$uuid = (new UUID())->generate();
 
-					// $island = SkyBlockIsland::get($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
 					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
 					$player->setIsland($island);
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
