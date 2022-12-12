@@ -29,7 +29,7 @@ class MySQL {
 			uuid VARCHAR(100) NOT NULL,
     		public_name VARCHAR(100) NOT NULL,
 			owner VARCHAR(100) NOT NULL,
-			members VARCHAR(100) NOT NULL
+			members JSON NOT NULL
 		)");
 	}
 
