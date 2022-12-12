@@ -51,7 +51,7 @@ class IslandCreateCommand extends BaseSubCommand {
 					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
 					$player->setIsland($island);
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
-					$submitter->sendForm(self::chooseIslandNameForm($submitter, $island));
+					$submitter->sendForm(self::chooseIslandNameForm($submitter));
 
 					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
 					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
