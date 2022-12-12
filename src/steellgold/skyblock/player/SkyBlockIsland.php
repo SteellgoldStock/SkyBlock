@@ -4,7 +4,6 @@ namespace steellgold\skyblock\player;
 
 use Exception;
 use steellgold\skyblock\utils\database\MySQL;
-use WeakMap;
 
 final class SkyBlockIsland {
 
@@ -26,6 +25,14 @@ final class SkyBlockIsland {
 	}
 
 	/**
+	 * @param SkyBlockIsland $island
+	 * @return void
+	 */
+	public static function referenceIsland(SkyBlockIsland $island): void {
+		self::$islands[$island->getIdentifier()] = $island;
+	}
+
+	/**
 	 * @param string $identifier
 	 * @param string $island_name
 	 * @param string $owner
@@ -37,7 +44,6 @@ final class SkyBlockIsland {
 		private string $owner,
 		private array  $members
 	) {
-		MySQL::mysqli()->query("INSERT INTO islands (uuid, public_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '". json_encode($this->members) ."')");
 	}
 
 	/** @return string */
