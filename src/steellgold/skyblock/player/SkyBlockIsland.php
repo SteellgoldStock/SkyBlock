@@ -20,7 +20,9 @@ final class SkyBlockIsland {
 			return null;
 		} else {
 			$data = $data->fetch_assoc();
-			return new SkyBlockIsland($data["uuid"], $data["public_name"], $data["owner"], json_decode($data["members"]));
+			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]));
+			self::$islands[$island->getIdentifier()] = $island;
+			return $island;
 		}
 	}
 
@@ -63,7 +65,7 @@ final class SkyBlockIsland {
 
 	/** @param string $island_name */
 	public function setIslandName(string $island_name): void {
-		MySQL::updateIsland("public_name", $island_name, $this->identifier);
+		MySQL::updateIsland("island_name", $island_name, $this->identifier);
 		$this->island_name = $island_name;
 	}
 
@@ -102,5 +104,9 @@ final class SkyBlockIsland {
 	 */
 	public function removeMember(string $member): void {
 		$this->members = array_diff($this->members, [$member]);
+	}
+
+	public function create(): void {
+		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '". json_encode($this->members) ."')");
 	}
 }
