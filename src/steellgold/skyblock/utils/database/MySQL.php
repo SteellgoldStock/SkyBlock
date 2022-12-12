@@ -33,6 +33,11 @@ class MySQL {
 		)");
 	}
 
+	public static function removeIsland(string $uuid): void {
+		$mysqli = self::mysqli();
+		$mysqli->query("DELETE FROM islands WHERE uuid = '{$uuid}'");
+	}
+
 	public static function updateIsland($column, $value, $uuid): void {
 		$mysqli = self::mysqli();
 		$mysqli->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
