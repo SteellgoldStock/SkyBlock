@@ -4,3 +4,6 @@ database:
   username: username
   password: password
   port: 3306
+
+island:
+  default_name: "Super île de {player}"
