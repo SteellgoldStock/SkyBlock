@@ -14,9 +14,6 @@ class PlayerListeners implements Listener {
 
 	/** @throws Exception */
 	public function onPlayerJoin(PlayerJoinEvent $event) {
-		$player = $event->getPlayer();
-		$session = SkyBlockPlayer::get($player);
-
 		// TODO: Check if player has an island
 		//       if island exists always teleport player to island
 		//       if island doesn't exist teleport player to spawn and clear inventory
