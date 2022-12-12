@@ -21,7 +21,7 @@ final class SkyBlockIsland {
 			return null;
 		} else {
 			$data = $data->fetch_assoc();
-			return new SkyBlockIsland($data["uuid"], $data["public_name"], $data["owner"], []);
+			return new SkyBlockIsland($data["uuid"], $data["public_name"], $data["owner"], json_decode($data["members"]));
 		}
 	}
 
@@ -37,6 +37,7 @@ final class SkyBlockIsland {
 		private string $owner,
 		private array  $members
 	) {
+		MySQL::mysqli()->query("INSERT INTO islands (uuid, public_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '". json_encode($this->members) ."')");
 	}
 
 	/** @return string */
