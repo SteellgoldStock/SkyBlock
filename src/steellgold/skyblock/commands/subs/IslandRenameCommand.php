@@ -11,6 +11,7 @@ use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use steellgold\skyblock\player\SkyBlockPlayer;
+use steellgold\skyblock\SkyBlock;
 use steellgold\skyblock\utils\TextUtils;
 
 class IslandRenameCommand extends BaseSubCommand {
@@ -34,7 +35,7 @@ class IslandRenameCommand extends BaseSubCommand {
 		$sender->sendForm(new CustomForm(
 			TextUtils::FORM_TITLE, [
 				new Label("label", "§d- §rEntrez le nouveau nom de votre île."),
-				new Input("name", "Nouveau nom d'île", $session->getIsland()->getIslandName())
+				new Input("name", "Nouveau nom d'île", str_replace("{player}",$sender->getName(),SkyBlock::getInstance()->getConfig()->get("island")["default_name"]))
 			],
 			function (Player $player, CustomFormResponse $response) : void {
 				if ($response->getString("name") === "") {
