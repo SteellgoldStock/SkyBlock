@@ -44,12 +44,18 @@ class IslandInviteCommand extends BaseSubCommand {
 
 	public function invitePlayerForm(?string $option) : CustomForm {
 		$players = [];
+		$i = 0;
+		$finded = 0;
 		foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
 			$players[] = $onlinePlayer->getName();
+			$i++;
+
+			if ($onlinePlayer->getName() == $option) $finded = $i;
 		}
 
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
+			new Dropdown("player", "Choisissez un joueur à inviter", $players, $finded),
 		], function (Player $player, CustomFormResponse $response) use ($option) : void {
 			var_dump($response);
 		}, function (Player $player) use ($option) : void {
