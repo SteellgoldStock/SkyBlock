@@ -3,11 +3,13 @@
 namespace steellgold\skyblock\player;
 
 use Exception;
+use pocketmine\player\Player;
 use steellgold\skyblock\utils\database\MySQL;
 
 final class SkyBlockIsland {
 
 	public static array $islands = [];
+	public static array $invites = [];
 
 	/**
 	 * @param string $uuid
@@ -104,6 +106,29 @@ final class SkyBlockIsland {
 	 */
 	public function removeMember(string $member): void {
 		$this->members = array_diff($this->members, [$member]);
+	}
+
+	public function addInvite(string $player, string $inviter): void {
+		self::$invites[$player] = [
+			"expire_at" => time() + 60,
+			"invited_by" => $inviter
+		];
+	}
+
+	public function removeInvite(string $player): void {
+		unset(self::$invites[$player]);
+	}
+
+	public function isInvited(string $player): bool {
+		return isset(self::$invites[$player]);
+	}
+
+	public function getInvite(string $player): ?array {
+		return self::$invites[$player] ?? null;
+	}
+
+	public function getInvites(): array {
+		return self::$invites;
 	}
 
 	public function create(): void {
