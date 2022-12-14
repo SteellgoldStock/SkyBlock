@@ -38,8 +38,8 @@ class IslandInviteCommand extends BaseSubCommand {
 			return;
 		}
 
-		if (!isset($args["player"])) $this->invitePlayerForm(null);
-		else $this->invitePlayerForm($args["player"]);
+		if (!isset($args["player"])) $sender->sendForm($this->invitePlayerForm(null));
+		else $sender->sendForm($this->invitePlayerForm($args["player"]));
 	}
 
 	public function invitePlayerForm(?string $option) : CustomForm {
