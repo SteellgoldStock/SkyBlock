@@ -53,9 +53,9 @@ class IslandInviteCommand extends BaseSubCommand {
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
 			$element
-		], function (Player $player, CustomFormResponse $response) use ($option) {
+		], function (Player $player, CustomFormResponse $response) use ($option) : void {
 			var_dump($response);
-		}, function (Player $player) use ($option) {
+		}, function (Player $player) use ($option) : void {
 			$player->sendMessage(TextUtils::error("Vous avez annulé l'invitation."));
 		});
 	}
