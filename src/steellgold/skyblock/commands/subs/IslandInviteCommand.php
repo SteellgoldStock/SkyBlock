@@ -48,11 +48,8 @@ class IslandInviteCommand extends BaseSubCommand {
 			$players[] = $onlinePlayer->getName();
 		}
 
-		// If option was not set, define a dropdown with all online players, else define a label with the player name
-		$element = $option === null ? new Dropdown("player", "Choisissez un joueur à inviter", $players) : new Input("player", "Pseudonyme du joueur à inviter" . $option);
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
-			$element
 		], function (Player $player, CustomFormResponse $response) use ($option) : void {
 			var_dump($response);
 		}, function (Player $player) use ($option) : void {
