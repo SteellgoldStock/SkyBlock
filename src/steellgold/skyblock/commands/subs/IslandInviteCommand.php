@@ -15,6 +15,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use steellgold\skyblock\player\SkyBlockPlayer;
+use steellgold\skyblock\utils\Invites;
 use steellgold\skyblock\utils\TextUtils;
 
 class IslandInviteCommand extends BaseSubCommand {
@@ -54,8 +55,23 @@ class IslandInviteCommand extends BaseSubCommand {
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
 			new Dropdown("player", "Choisissez un joueur à inviter", $players, $f),
-		], function (Player $player, CustomFormResponse $response) use ($option): void {
-			var_dump($response);
+		], function (Player $player, CustomFormResponse $response) use ($option, $players): void {
+			$guest = Server::getInstance()->getPlayerExact($players[$response->getInt("player")]);
+			if (!$guest instanceof Player) {
+				$player->sendMessage(TextUtils::error("Le joueur §f" . $response->getString("player") . " §cn'est pas en ligne, "));
+				return;
+			}
+
+			$session = SkyBlockPlayer::get($guest);
+			if ($session->hasIsland()) {
+				$player->sendMessage(TextUtils::error("Le joueur §f" . $guest->getName() . " §ca déjà une île."));
+				return;
+			}
+
+			$session = SkyBlockPlayer::get($player);
+			$session->getIsland()->addInvite($guest, $player);
+			$player->sendMessage(TextUtils::text("Vous avez invité §f" . $guest->getName() . " §aà rejoindre votre île."));
+			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . "§f, tapez §d/island invites §fpour rejoindre."));
 		}, function (Player $player) use ($option): void {
 			$player->sendMessage(TextUtils::error("Vous avez annulé l'invitation."));
 		});
