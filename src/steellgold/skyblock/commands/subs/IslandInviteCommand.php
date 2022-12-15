@@ -8,7 +8,6 @@ use CortexPE\Commando\exception\ArgumentOrderException;
 use dktapps\pmforms\CustomForm;
 use dktapps\pmforms\CustomFormResponse;
 use dktapps\pmforms\element\Dropdown;
-use dktapps\pmforms\element\Input;
 use dktapps\pmforms\element\Label;
 use Exception;
 use pocketmine\command\CommandSender;
@@ -55,6 +54,7 @@ class IslandInviteCommand extends BaseSubCommand {
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
 			new Dropdown("player", "Choisissez un joueur à inviter", $players, $f),
+			new Dropdown("role", "Choisissez le rôle du joueur", ["Sous-Chef", "Assistants", "Membre"], 2)
 		], function (Player $player, CustomFormResponse $response) use ($option, $players): void {
 			$guest = Server::getInstance()->getPlayerExact($players[$response->getInt("player")]);
 			if (!$guest instanceof Player) {
@@ -68,8 +68,12 @@ class IslandInviteCommand extends BaseSubCommand {
 				return;
 			}
 
-			$session = SkyBlockPlayer::get($player);
-			$session->getIsland()->addInvite($guest, $player);
+			if (Invites::isInvited($guest->getName())) {
+				$player->sendMessage(TextUtils::error("Le joueur §f" . $guest->getName() . " §ca déjà une invitation en attente."));
+				return;
+			}
+
+			Invites::addInvite($guest->getName(), $player->getName(), SkyBlockPlayer::get($player)->getIsland());
 			$player->sendMessage(TextUtils::text("Vous avez invité §f" . $guest->getName() . " §aà rejoindre votre île."));
 			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . "§f, tapez §d/island invites §fpour rejoindre."));
 		}, function (Player $player) use ($option): void {
