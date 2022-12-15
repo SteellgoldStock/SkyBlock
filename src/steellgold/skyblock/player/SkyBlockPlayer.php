@@ -41,6 +41,7 @@ final class SkyBlockPlayer {
 
 		$data = MySQL::mysqli()->query("SELECT * FROM players WHERE player = '{$player->getName()}'")->fetch_assoc();
 
+		/** @var null|SkyBlockIsland $island */
 		$island = null;
 		if ($data["island"] !== "null") {
 			if (MySQL::islandExists($data["island"])) {
