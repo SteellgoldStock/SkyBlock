@@ -54,7 +54,6 @@ final class SkyBlockPlayer {
 		if ($island === null) {
 			$player->teleport($player->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
 			$player->getInventory()->clearAll();
-			var_dump("az");
 		}
 
 		return new SkyBlockPlayer($player->getName(), $island);
