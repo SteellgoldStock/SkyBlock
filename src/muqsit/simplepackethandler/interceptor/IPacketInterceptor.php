@@ -9,33 +9,33 @@ use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\ClientboundPacket;
 use pocketmine\network\mcpe\protocol\ServerboundPacket;
 
-interface IPacketInterceptor{
+interface IPacketInterceptor {
 
 	/**
 	 * @template TServerboundPacket of ServerboundPacket
 	 * @param Closure(TServerboundPacket, NetworkSession) : bool $handler
 	 * @return IPacketInterceptor
 	 */
-	public function interceptIncoming(Closure $handler) : IPacketInterceptor;
+	public function interceptIncoming(Closure $handler): IPacketInterceptor;
 
 	/**
 	 * @template TClientboundPacket of ClientboundPacket
 	 * @param Closure(TClientboundPacket, NetworkSession) : bool $handler
 	 * @return IPacketInterceptor
 	 */
-	public function interceptOutgoing(Closure $handler) : IPacketInterceptor;
+	public function interceptOutgoing(Closure $handler): IPacketInterceptor;
 
 	/**
 	 * @template TServerboundPacket of ServerboundPacket
 	 * @param Closure(TServerboundPacket, NetworkSession) : bool $handler
 	 * @return IPacketInterceptor
 	 */
-	public function unregisterIncomingInterceptor(Closure $handler) : IPacketInterceptor;
+	public function unregisterIncomingInterceptor(Closure $handler): IPacketInterceptor;
 
 	/**
 	 * @template TClientboundPacket of ClientboundPacket
 	 * @param Closure(TClientboundPacket, NetworkSession) : bool $handler
 	 * @return IPacketInterceptor
 	 */
-	public function unregisterOutgoingInterceptor(Closure $handler) : IPacketInterceptor;
+	public function unregisterOutgoingInterceptor(Closure $handler): IPacketInterceptor;
 }
