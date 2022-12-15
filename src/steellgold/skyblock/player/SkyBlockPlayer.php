@@ -5,6 +5,7 @@ namespace steellgold\skyblock\player;
 use Exception;
 use pocketmine\player\Player;
 use steellgold\skyblock\utils\database\MySQL;
+use steellgold\skyblock\utils\TextUtils;
 use WeakMap;
 
 final class SkyBlockPlayer {
@@ -42,7 +43,18 @@ final class SkyBlockPlayer {
 
 		$island = null;
 		if ($data["island"] !== "null") {
-			$island = SkyBlockIsland::loadIslandSession($data["island"]);
+			if (MySQL::islandExists($data["island"])) {
+				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
+					$island = SkyBlockIsland::loadIslandSession($data["island"]);
+					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
+				} else $player->sendMessage(TextUtils::text("Pendant votre absence, vous avez été exclu de l'île."));
+			} else $player->sendMessage(TextUtils::text("Pendant votre absence, votre île a été supprimée par son propriétaire."));
+		}
+
+		if ($island === null) {
+			$player->teleport($player->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
+			$player->getInventory()->clearAll();
+			var_dump("az");
 		}
 
 		return new SkyBlockPlayer($player->getName(), $island);
