@@ -13,10 +13,13 @@ class PlayerListeners implements Listener {
 
 	/** @throws Exception */
 	public function onPlayerJoin(PlayerJoinEvent $event) {
+		$player = $event->getPlayer();
+		$session = SkyBlockPlayer::get($player);
 	}
 
 	/** @throws Exception */
 	public function onPlayerQuit(PlayerQuitEvent $event) {
+		// Path: src\steellgold\skyblock\listeners\PlayerListeners.php
 	}
 
 	public function onPlayerMove(PlayerMoveEvent $event) {
