@@ -43,7 +43,7 @@ final class SkyBlockPlayer {
 
 		/** @var null|SkyBlockIsland $island */
 		$island = null;
-		
+
 		if ($data["island"] !== "null") {
 			if (MySQL::islandExists($data["island"])) {
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
@@ -59,7 +59,7 @@ final class SkyBlockPlayer {
 			$player->getInventory()->clearAll();
 		}
 
-		var_dump($island);
+		MySQL::updatePlayer("island",$island?->getIdentifier() ?? "null",$player->getName());
 		return new SkyBlockPlayer($player->getName(), $island);
 	}
 
