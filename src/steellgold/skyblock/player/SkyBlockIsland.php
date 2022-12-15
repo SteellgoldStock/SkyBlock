@@ -97,6 +97,7 @@ final class SkyBlockIsland {
 	 */
 	public function addMember(string $member): void {
 		$this->members[] = $member;
+		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
 	/**
@@ -105,6 +106,7 @@ final class SkyBlockIsland {
 	 */
 	public function removeMember(string $member): void {
 		$this->members = array_diff($this->members, [$member]);
+		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
 	}
