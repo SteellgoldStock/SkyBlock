@@ -43,10 +43,12 @@ final class SkyBlockPlayer {
 
 		/** @var null|SkyBlockIsland $island */
 		$island = null;
+		
 		if ($data["island"] !== "null") {
 			if (MySQL::islandExists($data["island"])) {
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
+					var_dump("a");
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
 				} else $player->sendMessage(TextUtils::text("Pendant votre absence, vous avez été exclu de l'île."));
 			} else $player->sendMessage(TextUtils::text("Pendant votre absence, votre île a été supprimée par son propriétaire."));
@@ -57,6 +59,7 @@ final class SkyBlockPlayer {
 			$player->getInventory()->clearAll();
 		}
 
+		var_dump($island);
 		return new SkyBlockPlayer($player->getName(), $island);
 	}
 
