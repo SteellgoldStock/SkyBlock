@@ -109,6 +109,12 @@ final class SkyBlockIsland {
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
+	/**
+	 * @param Player $player
+	 * @return bool
+	 */
+	public function isMember(Player $player): bool {
+		return in_array($player->getName(), $this->members);
 	}
 
 	public function create(): void {
