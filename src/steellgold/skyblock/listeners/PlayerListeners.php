@@ -40,7 +40,7 @@ class PlayerListeners implements Listener {
 		$toZ = $to->getZ();
 
 		if ($fromX !== $toX || $fromY !== $toY || $fromZ !== $toZ) {
-			$player->sendTip("§aX: §b$toX §aY: §b$toY §aZ: §b$toZ");
+			$player->sendTip("§dX: §f$toX §dY: §f$toY §dZ: §f$toZ");
 		}
 	}
 }
