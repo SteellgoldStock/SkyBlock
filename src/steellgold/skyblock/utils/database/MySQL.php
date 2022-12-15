@@ -2,6 +2,7 @@
 
 namespace steellgold\skyblock\utils\database;
 
+use steellgold\skyblock\commands\subs\IslandAcceptCommand;
 use steellgold\skyblock\SkyBlock;
 
 class MySQL {
@@ -46,6 +47,22 @@ class MySQL {
 	public static function updateIsland($column, $value, $uuid): void {
 		$mysqli = self::mysqli();
 		$mysqli->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
+	}
+
+	public static function islandExists(string $uuid): bool {
+		$mysqli = self::mysqli();
+		$data = $mysqli->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
+		return $data->num_rows > 0;
+	}
+
+	public static function getIsland(string $uuid): ?array {
+		$mysqli = self::mysqli();
+		$data = $mysqli->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
+		if (!$data) {
+			return null;
+		} else {
+			return $data->fetch_assoc();
+		}
 	}
 
 	public static function updatePlayer($column, $value, $player): void {
