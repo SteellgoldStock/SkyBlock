@@ -59,7 +59,7 @@ final class SkyBlockPlayer {
 			$player->getInventory()->clearAll();
 		}
 
-		MySQL::updatePlayer("island",$island?->getIdentifier() ?? "null",$player->getName());
+		MySQL::updatePlayer("island", $island?->getIdentifier() ?? "null", $player->getName());
 		return new SkyBlockPlayer($player->getName(), $island);
 	}
 

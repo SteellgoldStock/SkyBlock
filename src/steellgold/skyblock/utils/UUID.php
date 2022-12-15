@@ -8,6 +8,7 @@ use Exception;
  * https://gist.github.com/Steellgold/6e35fa696e197f650276b43d03237235
  */
 class UUID {
+
 	/**
 	 * @throws Exception
 	 */

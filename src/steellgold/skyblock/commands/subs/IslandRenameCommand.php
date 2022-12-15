@@ -34,10 +34,10 @@ class IslandRenameCommand extends BaseSubCommand {
 
 		$sender->sendForm(new CustomForm(
 			TextUtils::FORM_TITLE, [
-				new Label("label", "§d- §rEntrez le nouveau nom de votre île."),
-				new Input("name", "Nouveau nom d'île", str_replace("{player}",$sender->getName(),SkyBlock::getInstance()->getConfig()->get("island")["default_name"]))
-			],
-			function (Player $player, CustomFormResponse $response) : void {
+			new Label("label", "§d- §rEntrez le nouveau nom de votre île."),
+			new Input("name", "Nouveau nom d'île", str_replace("{player}", $sender->getName(), SkyBlock::getInstance()->getConfig()->get("island")["default_name"]))
+		],
+			function (Player $player, CustomFormResponse $response): void {
 				if ($response->getString("name") === "") {
 					$player->sendMessage(TextUtils::error("Vous devez écrire quelque chose."));
 					return;
@@ -49,7 +49,7 @@ class IslandRenameCommand extends BaseSubCommand {
 				$session->getIsland()->setIslandName($new_name);
 				$player->sendMessage(TextUtils::text("Vous venez de renommer votre île en « §d{$response->getString("name")} §f» avec succès!"));
 			},
-			function (Player $player) : void {
+			function (Player $player): void {
 				$player->sendMessage(TextUtils::error("Vous avez annulé la modification du nom de votre île."));
 			}
 		));

@@ -6,7 +6,9 @@ use steellgold\skyblock\commands\subs\IslandAcceptCommand;
 use steellgold\skyblock\SkyBlock;
 
 class MySQL {
+
 	private static \mysqli $mysqli;
+
 	public function __construct() {
 		$config = SkyBlock::getInstance()->getConfig();
 		self::$mysqli = new \mysqli(

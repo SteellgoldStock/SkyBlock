@@ -17,10 +17,10 @@ use SplFileInfo;
 class WorldUtils {
 
 	public static function removeWorld(string $name): int {
-		if(Server::getInstance()->getWorldManager()->isWorldLoaded($name)) {
+		if (Server::getInstance()->getWorldManager()->isWorldLoaded($name)) {
 			$world = WorldUtils::getWorldByNameNonNull($name);
-			if(count($world->getPlayers()) > 0) {
-				foreach($world->getPlayers() as $player) {
+			if (count($world->getPlayers()) > 0) {
+				foreach ($world->getPlayers() as $player) {
 					$player->teleport(WorldUtils::getDefaultWorldNonNull()->getSpawnLocation());
 				}
 			}
@@ -32,9 +32,9 @@ class WorldUtils {
 
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($worldPath = Server::getInstance()->getDataPath() . "/worlds/$name", FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
 		/** @var SplFileInfo $fileInfo */
-		foreach($files as $fileInfo) {
-			if($filePath = $fileInfo->getRealPath()) {
-				if($fileInfo->isFile()) {
+		foreach ($files as $fileInfo) {
+			if ($filePath = $fileInfo->getRealPath()) {
+				if ($fileInfo->isFile()) {
 					unlink($filePath);
 				} else {
 					rmdir($filePath);
@@ -54,7 +54,7 @@ class WorldUtils {
 	 */
 	public static function getWorldByNameNonNull(string $name): World {
 		$world = Server::getInstance()->getWorldManager()->getWorldByName($name);
-		if($world === null) {
+		if ($world === null) {
 			throw new AssumptionFailedError("Required world $name is null");
 		}
 
@@ -63,7 +63,7 @@ class WorldUtils {
 
 	public static function getDefaultWorldNonNull(): World {
 		$world = Server::getInstance()->getWorldManager()->getDefaultWorld();
-		if($world === null) {
+		if ($world === null) {
 			throw new AssumptionFailedError("Default world is null");
 		}
 
@@ -80,12 +80,12 @@ class WorldUtils {
 
 		WorldUtils::lazyLoadWorld($newName);
 		$newWorld = Server::getInstance()->getWorldManager()->getWorldByName($newName);
-		if(!$newWorld instanceof World) {
+		if (!$newWorld instanceof World) {
 			return;
 		}
 
 		$worldData = $newWorld->getProvider()->getWorldData();
-		if(!$worldData instanceof BaseNbtWorldData) {
+		if (!$worldData instanceof BaseNbtWorldData) {
 			return;
 		}
 
@@ -96,7 +96,7 @@ class WorldUtils {
 	}
 
 	public static function duplicateWorld(string $worldName, string $duplicateName): void {
-		if(Server::getInstance()->getWorldManager()->isWorldLoaded($worldName)) {
+		if (Server::getInstance()->getWorldManager()->isWorldLoaded($worldName)) {
 			WorldUtils::getWorldByNameNonNull($worldName)->save();
 		}
 
@@ -104,9 +104,9 @@ class WorldUtils {
 
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Server::getInstance()->getDataPath() . "/worlds/$worldName", FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
 		/** @var SplFileInfo $fileInfo */
-		foreach($files as $fileInfo) {
-			if($filePath = $fileInfo->getRealPath()) {
-				if($fileInfo->isFile()) {
+		foreach ($files as $fileInfo) {
+			if ($filePath = $fileInfo->getRealPath()) {
+				if ($fileInfo->isFile()) {
 					@copy($filePath, str_replace($worldName, $duplicateName, $filePath));
 				} else {
 					mkdir(str_replace($worldName, $duplicateName, $filePath));
@@ -120,7 +120,7 @@ class WorldUtils {
 	 * If it has already been unloaded before calling this function, returns FALSE!
 	 */
 	public static function lazyUnloadWorld(string $name, bool $force = false): bool {
-		if(($world = Server::getInstance()->getWorldManager()->getWorldByName($name)) !== null) {
+		if (($world = Server::getInstance()->getWorldManager()->getWorldByName($name)) !== null) {
 			return Server::getInstance()->getWorldManager()->unloadWorld($world, $force);
 		}
 		return false;
@@ -140,7 +140,7 @@ class WorldUtils {
 	 */
 	public static function getAllWorlds(): array {
 		$files = scandir(Server::getInstance()->getDataPath() . "/worlds/");
-		if(!$files) {
+		if (!$files) {
 			return [];
 		}
 
@@ -151,7 +151,7 @@ class WorldUtils {
 			$files
 		));
 
-		return array_values(array_filter($files, function(string $fileName): bool {
+		return array_values(array_filter($files, function (string $fileName): bool {
 			return Server::getInstance()->getWorldManager()->isWorldGenerated($fileName) &&
 				$fileName !== "." && $fileName !== ".."; // Server->isWorldGenerated detects '.' and '..' as world, TODO - make pull request
 		}));

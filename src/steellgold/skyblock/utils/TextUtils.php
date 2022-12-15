@@ -3,6 +3,7 @@
 namespace steellgold\skyblock\utils;
 
 class TextUtils {
+
 	const PREFIX = "§dSkyBlock §f» ";
 	const ERROR = "§cErreur §f» ";
 

@@ -118,6 +118,6 @@ final class SkyBlockIsland {
 	}
 
 	public function create(): void {
-		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '". json_encode($this->members) ."')");
+		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '" . json_encode($this->members) . "')");
 	}
 }
