@@ -16,7 +16,7 @@ use steellgold\skyblock\utils\WorldUtils;
 class IslandDisbandCommand extends BaseSubCommand {
 
 	protected function prepare(): void {
-		// TODO: Implement prepare() method.
+
 	}
 
 	/**
@@ -48,7 +48,11 @@ class IslandDisbandCommand extends BaseSubCommand {
 					MySQL::removeIsland($island->getIdentifier());
 					$submitter->sendMessage(TextUtils::text("Vous venez de supprimer votre île avec succès!"));
 					$submitter->teleport(WorldUtils::getDefaultWorldNonNull()->getSpawnLocation());
+
 					$submitter->getInventory()->clearAll();
+					$submitter->getEnderInventory()->clearAll();
+					$submitter->getXpManager()->setXpLevel(0);
+					$submitter->getXpManager()->setXpProgress(0);
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la suppression de votre île."));
 				}
