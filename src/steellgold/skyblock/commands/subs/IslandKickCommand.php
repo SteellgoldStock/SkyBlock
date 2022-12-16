@@ -29,9 +29,19 @@ class IslandKickCommand extends BaseSubCommand {
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
+		$sender->sendForm($this->kickPlayerForm($guest, $session->getIsland()));
 	}
 
 	public function kickPlayerForm(?string $option, SkyBlockIsland $island): CustomForm {
+		$players = [];
+		$i = 0;
+		$f = 0;
+		foreach ($island->getMembers() as $onlinePlayer) {
+			$players[] = $onlinePlayer;
+			if ($onlinePlayer === $option) $f = $i;
+			$i++;
+		}
+
 		return new CustomForm("Expulser un joueur", [
 			new Label("info", "Choisissez un joueur à expulser, il pourra revenir dans votre île §davec une invitation§f."),
 			new Dropdown("player", "Choisissez un joueur à expulser", $players, $f),
