@@ -112,7 +112,7 @@ final class SkyBlockIsland {
 	 */
 	public function removeMember(string|Player $member): void {
 		$this->members = array_diff($this->members, [($member instanceof Player ? $member->getName() : $member)]);
-		MySQL::updatePlayer("members", json_encode($this->members), $this->identifier);
+		MySQL::updatePlayer("island", "null", ($member instanceof Player ? $member->getName() : $member));
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
