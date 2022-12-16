@@ -4,6 +4,7 @@ namespace steellgold\skyblock;
 
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
+use muqsit\invmenu\InvMenuHandler;
 use mysqli;
 use pocketmine\plugin\PluginBase;
 use steellgold\skyblock\commands\IslandCommand;
@@ -24,6 +25,10 @@ class SkyBlock extends PluginBase {
 
 		if (!PacketHooker::isRegistered()) {
 			PacketHooker::register($this);
+		}
+
+		if(!InvMenuHandler::isRegistered()){
+			InvMenuHandler::register($this);
 		}
 
 		$this->saveResource("config.yml");
