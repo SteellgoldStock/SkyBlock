@@ -5,6 +5,7 @@ namespace steellgold\skyblock\player;
 use Exception;
 use pocketmine\player\Player;
 use steellgold\skyblock\utils\database\MySQL;
+use steellgold\skyblock\utils\TextUtils;
 
 final class SkyBlockIsland {
 
@@ -110,6 +111,26 @@ final class SkyBlockIsland {
 	public function removeMember(string|Player $member): void {
 		$this->members = array_diff($this->members, [($member instanceof Player ? $member->getName() : $member)]);
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
+	}
+
+	public function kick(string|Player $member, bool $keep_inventory = false, bool $keep_enderchest = false, bool $keep_experience = false): void {
+		$this->removeMember($member);
+		if ($member instanceof Player) {
+			$member->sendMessage(TextUtils::text("Vous venez d'être expulsé de l'île {$this->getIslandName()}"));
+
+			if (!$keep_inventory) {
+				$member->getInventory()->clearAll();
+			}
+
+			if (!$keep_enderchest) {
+				$member->getEnderChestInventory()->clearAll();
+			}
+
+			if (!$keep_experience) {
+				$member->getXpManager()->setXpLevel(0);
+				$member->getXpManager()->setXpProgress(0);
+			}
+		}
 	}
 
 	/**
