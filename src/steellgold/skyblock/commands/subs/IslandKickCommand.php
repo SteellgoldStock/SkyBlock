@@ -29,6 +29,22 @@ class IslandKickCommand extends BaseSubCommand {
 	}
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
+		if (!$sender instanceof Player) return;
+		$session = SkyBlockPlayer::get($sender);
+
+		if (!$session->hasIsland()) {
+			$sender->sendMessage(TextUtils::error("Vous n'avez pas d'île, créez une avant de pouvoir d'expulser des personnes."));
+			return;
+		}
+
+		$guest = $args["player"] ?? null;
+		if ($guest !== null) {
+			if ($session->getIsland()->isMember($guest) === null) {
+				$sender->sendMessage(TextUtils::error("Ce joueur n'est pas sur votre île."));
+				return;
+			}
+		}
+
 		$sender->sendForm($this->kickPlayerForm($guest, $session->getIsland()));
 	}
 
