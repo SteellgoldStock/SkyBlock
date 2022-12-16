@@ -38,7 +38,7 @@ class IslandInviteCommand extends BaseSubCommand {
 			return;
 		}
 
-		if ($this->checkIfSame($session, $args["player"])){
+		if (self::checkIfSame($sender, $args["player"])){
 			$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
 			return;
 		}
@@ -67,8 +67,9 @@ class IslandInviteCommand extends BaseSubCommand {
 				return;
 			}
 
-			if ($this->checkIfSame($player, $args["player"])) {
-				$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
+			if (IslandInviteCommand::checkIfSame($player, $response->getString("player"))) {
+				$player->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
+				return;
 			}
 
 			$session = SkyBlockPlayer::get($guest);
@@ -90,7 +91,7 @@ class IslandInviteCommand extends BaseSubCommand {
 		});
 	}
 
-	private function checkIfSame(Player $player, string $player2): bool {
+	public static function checkIfSame(Player $player, string $player2): bool {
 		return $player->getName() == $player2;
 	}
 }
