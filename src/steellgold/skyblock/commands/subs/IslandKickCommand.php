@@ -30,5 +30,25 @@ class IslandKickCommand extends BaseSubCommand {
 
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 	}
+
 	public function kickPlayerForm(?string $option, SkyBlockIsland $island): CustomForm {
+		return new CustomForm("Expulser un joueur", [
+			new Label("info", "Choisissez un joueur à expulser, il pourra revenir dans votre île §davec une invitation§f."),
+			new Dropdown("player", "Choisissez un joueur à expulser", $players, $f),
+			new Toggle("keep_inventory", "Il gardera son inventaire", false),
+			new Toggle("keep_enderchest", "Il gardera son enderchest", false),
+			new Toggle("keep_experience", "Il gardera son expérience et ses niveaux", false),
+			new Input("reason", "Précisez une §draison §fde l'expulsion", "Il n'a pas goutté à mes pommes."),
+			new Toggle("ban", "§dBannir §fle joueur de l'île? (Il ne pourra pas la visiter)", false),
+			new Toggle("confirm", "Je confirme vouloir §dexpulser ce joueur", false)
+		], function (Player $player, CustomFormResponse $response) use ($option, $players): void {
+			if (!$response->getBool("confirm")) {
+				$player->sendMessage(TextUtils::error("Vous n'avez pas confirmé l'expulsion du joueur."));
+				return;
+			}
+
+		}, function (Player $player) use ($option): void {
+			$player->sendMessage(TextUtils::error("Vous avez annulé l'expulsion."));
+		});
+	}
 }
