@@ -67,12 +67,30 @@ class IslandKickCommand extends BaseSubCommand {
 			new Input("reason", "Précisez une §draison §fde l'expulsion", "Il n'a pas goutté à mes pommes."),
 			new Toggle("ban", "§dBannir §fle joueur de l'île? (Il ne pourra pas la visiter)", false),
 			new Toggle("confirm", "Je confirme vouloir §dexpulser ce joueur", false)
-		], function (Player $player, CustomFormResponse $response) use ($option, $players): void {
+		], function (Player $player, CustomFormResponse $response) use ($option, $players, $island): void {
 			if (!$response->getBool("confirm")) {
 				$player->sendMessage(TextUtils::error("Vous n'avez pas confirmé l'expulsion du joueur."));
 				return;
 			}
 
+			$playerName = $players[$response->getInt("player")];
+			$guest = Server::getInstance()->getPlayerExact($playerName);
+			if (!$guest instanceof Player) {
+				$connected = false;
+				$player->sendMessage(TextUtils::error("Le joueur n'est pas connecté, il sera donc averti par message lors de sa prochaine connexion."));
+			} else $connected = true;
+
+			$island->kick(
+				$player->getName(),
+				$playerName,
+				$response->getBool("keep_inventory"),
+				$response->getBool("keep_enderchest"),
+				$response->getBool("keep_experience"),
+				strlen($response->getString("reason")) > 0 ? $response->getString("reason") : "Aucune raison n'a été précisée.",
+				$connected
+			);
+
+			$player->sendMessage(TextUtils::text("Vous avez bien expulsé §d$playerName §fde l'île."));
 		}, function (Player $player) use ($option): void {
 			$player->sendMessage(TextUtils::error("Vous avez annulé l'expulsion."));
 		});
