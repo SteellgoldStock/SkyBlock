@@ -37,6 +37,13 @@ class IslandKickCommand extends BaseSubCommand {
 			return;
 		}
 
+		if (isset($args["player"])) {
+			if (IslandInviteCommand::checkIfSame($sender, $args["player"])){
+				$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
+				return;
+			}
+		}
+
 		$guest = $args["player"] ?? null;
 		if ($guest !== null) {
 			if ($session->getIsland()->isMember($guest) === null) {
