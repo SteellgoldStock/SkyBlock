@@ -13,10 +13,14 @@ final class SkyBlockPlayer {
 	/**
 	 * @param string $name
 	 * @param SkyBlockIsland|null $island
+	 * @param array $lastKick
+	 * @param array $islandsBans
 	 */
 	public function __construct(
 		private string          $name,
-		private ?SkyBlockIsland $island
+		private ?SkyBlockIsland $island,
+		private array           $lastKick,
+		private array           $islandsBans
 	) {
 	}
 
@@ -36,7 +40,8 @@ final class SkyBlockPlayer {
 	/** @throws Exception */
 	private static function loadSessionData(Player $player): SkyBlockPlayer {
 		if (!$player->hasPlayedBefore()) {
-			MySQL::mysqli()->query("INSERT INTO players (player, island) VALUES ('{$player->getName()}', 'null')");
+			$base = json_encode([]);
+			MySQL::mysqli()->query("INSERT INTO players (player, island, last_kick, islands_bans) VALUES ('{$player->getName()}', 'null', '{$base}', '{$base}')");
 		}
 
 		$data = MySQL::mysqli()->query("SELECT * FROM players WHERE player = '{$player->getName()}'")->fetch_assoc();
@@ -48,7 +53,6 @@ final class SkyBlockPlayer {
 			if (MySQL::islandExists($data["island"])) {
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
-					var_dump("a");
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
 				} else $player->sendMessage(TextUtils::text("Pendant votre absence, vous avez été exclu de l'île."));
 			} else $player->sendMessage(TextUtils::text("Pendant votre absence, votre île a été supprimée par son propriétaire."));
@@ -60,7 +64,7 @@ final class SkyBlockPlayer {
 		}
 
 		MySQL::updatePlayer("island", $island?->getIdentifier() ?? "null", $player->getName());
-		return new SkyBlockPlayer($player->getName(), $island);
+		return new SkyBlockPlayer($player->getName(), $island, json_decode($data["last_kick"]), json_decode($data["islands_bans"]));
 	}
 
 	/** @return string */
@@ -89,5 +93,28 @@ final class SkyBlockPlayer {
 
 	public function hasIsland(): bool {
 		return $this->island !== null;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getIslandsBans(): array {
+		return $this->islandsBans;
+	}
+
+	public function addIslandBan(?string $reason, SkyBlockIsland $island): void {
+		$this->islandsBans[] = [
+			"date" => time(),
+			"reason" => $reason,
+			"island" => $island->getIdentifier()
+		];
+		MySQL::updatePlayer("islands_bans", json_encode($this->islandsBans), $this->getName());
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getLastKick(): array {
+		return $this->lastKick;
 	}
 }
