@@ -4,8 +4,10 @@ namespace steellgold\skyblock\player;
 
 use Exception;
 use pocketmine\player\Player;
+use pocketmine\Server;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
+use steellgold\skyblock\utils\WorldUtils;
 
 final class SkyBlockIsland {
 
@@ -110,26 +112,43 @@ final class SkyBlockIsland {
 	 */
 	public function removeMember(string|Player $member): void {
 		$this->members = array_diff($this->members, [($member instanceof Player ? $member->getName() : $member)]);
+		MySQL::updatePlayer("members", json_encode($this->members), $this->identifier);
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
-	public function kick(string|Player $member, bool $keep_inventory = false, bool $keep_enderchest = false, bool $keep_experience = false): void {
+	public function kick(string $player, string $member, bool $keep_inventory = false, bool $keep_enderchest = false, bool $keep_experience = false, string $reason = "No reason specified", bool $connected = false): void {
 		$this->removeMember($member);
-		if ($member instanceof Player) {
-			$member->sendMessage(TextUtils::text("Vous venez d'être expulsé de l'île {$this->getIslandName()}"));
+		$date = date("Y-m-d H:i:s");
 
-			if (!$keep_inventory) {
-				$member->getInventory()->clearAll();
-			}
+		$message = "Vous venez d'être expulsé de l'île §d{$this->getIslandName()}" . PHP_EOL;
+		$message .= "§fPar: §d{$player} §fà: §d{$date}" . PHP_EOL;
+		$message .= "§fRaison: §d{$reason}" . PHP_EOL . PHP_EOL;
+		if ($keep_inventory) $message .= "§f- Votre §dinventaire §fa été conservé" . PHP_EOL;
+		else $message .= "§f- Votre §dinventaire §fa été vidé" . PHP_EOL;
+		if ($keep_enderchest) $message .= "§f- Votre §dcoffre du néant §fa été conservé" . PHP_EOL;
+		else $message .= "§f- Votre §dcoffre du néant §fa été vidé" . PHP_EOL;
+		if ($keep_experience) $message .= "§f- Votre §dexpérience §fa été conservé" . PHP_EOL;
+		else $message .= "§f- Votre §dexpérience §fa été vidé" . PHP_EOL;
 
-			if (!$keep_enderchest) {
-				$member->getEnderChestInventory()->clearAll();
-			}
-
+		$pwk = Server::getInstance()->getPlayerExact($member);
+		if ($connected and $pwk instanceof Player) {
+			$member = Server::getInstance()->getPlayerExact($member);
+			if (!$keep_inventory) $member->getInventory()->clearAll();
+			if (!$keep_enderchest) $member->getEnderInventory()->clearAll();
 			if (!$keep_experience) {
 				$member->getXpManager()->setXpLevel(0);
 				$member->getXpManager()->setXpProgress(0);
 			}
+
+			$member->sendMessage(TextUtils::text($message));
+			$member->teleport(WorldUtils::getDefaultWorldNonNull()->getSpawnLocation());
+		} else {
+			MySQL::updatePlayer("last_kick", json_encode([
+				"keep_inventory" => $keep_inventory,
+				"keep_enderchest" => $keep_enderchest,
+				"keep_experience" => $keep_experience,
+				"message" => base64_encode($message),
+			]), $member);
 		}
 	}
 
