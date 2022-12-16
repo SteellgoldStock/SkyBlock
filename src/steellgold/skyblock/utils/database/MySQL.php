@@ -29,7 +29,9 @@ class MySQL {
 		self::mysqli()->query("CREATE TABLE IF NOT EXISTS players (
 			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			player VARCHAR(100),
-			island VARCHAR(100) DEFAULT null
+			island VARCHAR(100) DEFAULT null,
+    		last_kick JSON NOT NULL,
+			islands_bans JSON NOT NULL
 		)");
 
 		self::mysqli()->query("CREATE TABLE IF NOT EXISTS islands (
