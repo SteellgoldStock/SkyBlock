@@ -20,9 +20,14 @@ use steellgold\skyblock\utils\Invites;
 use steellgold\skyblock\utils\TextUtils;
 
 class IslandKickCommand extends BaseSubCommand {
+
+	/**
+	 * @throws ArgumentOrderException
+	 */
 	protected function prepare(): void {
 		$this->registerArgument(0, new TargetArgument("player", true));
 	}
+
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 	}
 	public function kickPlayerForm(?string $option, SkyBlockIsland $island): CustomForm {
