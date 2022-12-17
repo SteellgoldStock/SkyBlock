@@ -67,7 +67,7 @@ class IslandInviteCommand extends BaseSubCommand {
 				return;
 			}
 
-			if (IslandInviteCommand::checkIfSame($player, $response->getString("player"))) {
+			if (IslandInviteCommand::checkIfSame($player, $players[$response->getInt("player")])){
 				$player->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
 				return;
 			}
