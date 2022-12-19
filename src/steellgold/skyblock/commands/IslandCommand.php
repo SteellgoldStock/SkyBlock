@@ -26,7 +26,7 @@ class IslandCommand extends BaseCommand {
 		$this->registerSubCommand(new IslandInviteCommand("invite", "Invite a player to your island"));
 		$this->registerSubCommand(new IslandAcceptCommand("accept", "Accept an invitation"));
 		$this->registerSubCommand(new IslandKickCommand("kick", "Kick a player from your island"));
-		$this->registerSubCommand(new IslandTeleportCommand("teleport", "Teleport to your island", ["go", "join"]));
+		$this->registerSubCommand(new IslandTeleportCommand("teleport", "Teleport to your island", ["tp", "join", "go"]));
 	}
 
 	/**
