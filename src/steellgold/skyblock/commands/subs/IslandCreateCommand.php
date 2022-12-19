@@ -44,18 +44,17 @@ class IslandCreateCommand extends BaseSubCommand {
 			function (Player $submitter, bool $choice) use ($player): void {
 				if ($choice) {
 					$uuid = (new UUID())->generate();
+					WorldUtils::duplicateWorld("copypaste", $uuid);
+					WorldUtils::renameWorld($uuid, $uuid);
+					$world = WorldUtils::getLoadedWorldByName($uuid);
 
-					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()], null);
+					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()], new Position(256, 71, 256, $world));
 					$island->create();
 					SkyBlockIsland::referenceIsland($island);
 
 					$player->setIsland($island);
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
-
-					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
-					WorldUtils::renameWorld($island->getIdentifier(), $island->getIdentifier());
-					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
-					$world->setSpawnLocation(new Vector3(256, 71, 256));
+					$world->setSpawnLocation($island->getSpawn());
 					$submitter->teleport($world->getSpawnLocation());
 				} else {
 					$submitter->sendMessage(TextUtils::error("Vous avez annulé la création de votre île."));
