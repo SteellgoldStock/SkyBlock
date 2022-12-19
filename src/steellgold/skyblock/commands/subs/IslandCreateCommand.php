@@ -8,6 +8,7 @@ use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
+use pocketmine\world\Position;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\TextUtils;
@@ -44,7 +45,7 @@ class IslandCreateCommand extends BaseSubCommand {
 				if ($choice) {
 					$uuid = (new UUID())->generate();
 
-					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()]);
+					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()], null);
 					$island->create();
 					SkyBlockIsland::referenceIsland($island);
 

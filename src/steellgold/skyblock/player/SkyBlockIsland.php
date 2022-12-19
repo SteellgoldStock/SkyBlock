@@ -3,8 +3,11 @@
 namespace steellgold\skyblock\player;
 
 use Exception;
+use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use pocketmine\world\Position;
+use pocketmine\world\World;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\WorldUtils;
@@ -12,6 +15,23 @@ use steellgold\skyblock\utils\WorldUtils;
 final class SkyBlockIsland {
 
 	public static array $islands = [];
+
+
+	/**
+	 * @param string $identifier
+	 * @param string $island_name
+	 * @param string $owner
+	 * @param string[] $members
+	 * @param Position|null $spawn
+	 */
+	public function __construct(
+		private string $identifier,
+		private string $island_name,
+		private string $owner,
+		private array  $members,
+		private ?Position $spawn
+	) {
+	}
 
 	/**
 	 * @param string $uuid
@@ -24,7 +44,11 @@ final class SkyBlockIsland {
 			return null;
 		} else {
 			$data = $data->fetch_assoc();
-			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]));
+			$position = json_decode($data["position"]);
+
+			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]),new Position(
+				$position["x"], $position["y"], $position["z"], WorldUtils::getWorldByNameNonNull($data["uuid"])
+			));
 			self::$islands[$island->getIdentifier()] = $island;
 			return $island;
 		}
@@ -36,20 +60,6 @@ final class SkyBlockIsland {
 	 */
 	public static function referenceIsland(SkyBlockIsland $island): void {
 		self::$islands[$island->getIdentifier()] = $island;
-	}
-
-	/**
-	 * @param string $identifier
-	 * @param string $island_name
-	 * @param string $owner
-	 * @param string[] $members
-	 */
-	public function __construct(
-		private string $identifier,
-		private string $island_name,
-		private string $owner,
-		private array  $members
-	) {
 	}
 
 	/** @return string */
@@ -160,5 +170,12 @@ final class SkyBlockIsland {
 
 	public function create(): void {
 		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '" . json_encode($this->members) . "')");
+	public function getWorld() : World {
+		return WorldUtils::getWorldByNameNonNull($this->identifier);
+	}
+
+	public function setSpawn(Position $position) {
+		$this->getWorld()->setSpawnLocation($position->asVector3());
+		MySQL::updateIsland("position", );
 	}
 }
