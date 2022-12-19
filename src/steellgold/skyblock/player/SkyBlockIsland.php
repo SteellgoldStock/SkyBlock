@@ -44,7 +44,11 @@ final class SkyBlockIsland {
 			return null;
 		} else {
 			$data = $data->fetch_assoc();
-			$position = json_decode($data["spawn"]);
+			$position = json_decode($data["spawn"], true);
+
+			$loaded = WorldUtils::lazyLoadWorld($data["uuid"]);
+			if ($loaded) Server::getInstance()->getLogger()->info("Island {$data["uuid"]} was loaded successfully !");
+			else Server::getInstance()->getLogger()->info("Island {$data["uuid"]} was not loaded successfully !");
 
 			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]), new Position(
 				$position["x"], $position["y"], $position["z"], WorldUtils::getWorldByNameNonNull($data["uuid"])
@@ -183,6 +187,7 @@ final class SkyBlockIsland {
 
 	public function setSpawn(Position $position) {
 		$this->getWorld()->setSpawnLocation($position->asVector3());
+		$this->spawn = $position;
 		MySQL::updateIsland("spawn", json_encode(["x" => $position->getX(), "y" => $position->getY(), "z" => $position->getZ()]), $this->getIdentifier());
 	}
 }
