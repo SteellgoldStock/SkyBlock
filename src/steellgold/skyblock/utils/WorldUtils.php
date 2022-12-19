@@ -3,14 +3,21 @@
 namespace steellgold\skyblock\utils;
 
 use FilesystemIterator;
+use pocketmine\block\tile\Chest;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\item\Item;
+use pocketmine\item\VanillaItems;
 use pocketmine\Server;
 use pocketmine\utils\AssumptionFailedError;
+use pocketmine\utils\Config;
 use pocketmine\world\format\io\data\BaseNbtWorldData;
 use pocketmine\world\World;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\SkyBlock;
+use Webmozart\PathUtil\Path;
 
 /**
  * From MultiWorld
@@ -171,6 +178,33 @@ class WorldUtils {
 	 * Not come from multiworld
 	 */
 	public static function isWorldExist(string $name): bool {
-		return is_dir(SkyBlock::getInstance()->getDataFolder() . "../worlds/" . $name);
+		var_dump(Path::join(Server::getInstance()->getDataPath(), "worlds", $name));
+		return is_dir(Path::join(Server::getInstance()->getDataPath(), "worlds", $name));
     }
+
+	public static function placeChest(World $world, SkyBlockIsland $island): void {
+		$chest_config = new Config(SkyBlock::getInstance()->getDataFolder() . "chest.json", Config::JSON);
+		$positions = $chest_config->get("position");
+
+		$chest = VanillaBlocks::CHEST();
+
+		// generate terrain
+
+		$world->setBlockAt($positions["x"], $positions["y"], $positions["z"], $chest);
+		$tile = $world->getTileAt($positions["x"], $positions["y"], $positions["z"]);
+
+		if ($tile instanceof Chest) {
+			$tile->setName("Ile de " . $island->getOwner());
+			$items = json_decode(base64_decode($chest_config->get("content")),true);
+
+			$i = 0;
+			foreach ($items as $item) {
+				$tile->getInventory()->setItem($i, Item::jsonDeserialize($item));
+				$i++;
+			}
+		}
+	}
+
+	// function to load terrain from coordinates
+	
 }
