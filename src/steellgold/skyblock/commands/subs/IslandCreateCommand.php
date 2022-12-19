@@ -52,6 +52,7 @@ class IslandCreateCommand extends BaseSubCommand {
 					$submitter->sendMessage(TextUtils::text("Vous venez de créer votre île « §d" . $island->getIslandName() . " §f» avec succès!"));
 
 					WorldUtils::duplicateWorld("copypaste", $island->getIdentifier());
+					WorldUtils::renameWorld($island->getIdentifier(), $island->getIdentifier());
 					$world = WorldUtils::getLoadedWorldByName($island->getIdentifier());
 					$world->setSpawnLocation(new Vector3(256, 71, 256));
 					$submitter->teleport($world->getSpawnLocation());
