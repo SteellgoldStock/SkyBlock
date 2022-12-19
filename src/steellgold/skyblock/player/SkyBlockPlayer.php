@@ -6,6 +6,7 @@ use Exception;
 use pocketmine\player\Player;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
+use steellgold\skyblock\utils\WorldUtils;
 use WeakMap;
 
 final class SkyBlockPlayer {
@@ -50,7 +51,7 @@ final class SkyBlockPlayer {
 		$island = null;
 
 		if ($data["island"] !== "null") {
-			if (MySQL::islandExists($data["island"])) {
+			if (MySQL::islandExists($data["island"]) AND WorldUtils::isWorldExist($data["island"])) {
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));

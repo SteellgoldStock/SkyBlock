@@ -10,6 +10,7 @@ use pocketmine\world\World;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use steellgold\skyblock\SkyBlock;
 
 /**
  * From MultiWorld
@@ -165,4 +166,11 @@ class WorldUtils {
 
 		return Server::getInstance()->getWorldManager()->getWorldByName($name);
 	}
+
+	/**
+	 * Not come from multiworld
+	 */
+	public static function isWorldExist(string $name): bool {
+		return is_dir(SkyBlock::getInstance()->getDataFolder() . "../worlds/" . $name);
+    }
 }
