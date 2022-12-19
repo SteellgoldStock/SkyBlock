@@ -42,7 +42,7 @@ class IslandStartChestCommand extends BaseSubCommand {
 	public function openConfigForm(): MenuForm {
 		return new MenuForm(
 			"Configuration",
-			"Vous êtes actuellement sur l'interface de configuration du coffre de départ qui apparait lors de la création d'une île\n§cInterfaces factices", [
+			"Vous êtes actuellement sur l'interface de configuration du coffre de départ qui apparait lors de la création d'une île", [
 			new MenuOption("Ouvrir (lecture-seule)", new FormIcon("textures/items/book_normal", FormIcon::IMAGE_TYPE_PATH)),
 			new MenuOption("Ouvrir (lecture-écriture)", new FormIcon("textures/items/book_writable", FormIcon::IMAGE_TYPE_PATH)),
 			new MenuOption("Modifier les coordonées d'apparition", new FormIcon("textures/items/compass_item", FormIcon::IMAGE_TYPE_PATH))
@@ -80,21 +80,22 @@ class IslandStartChestCommand extends BaseSubCommand {
 	}
 
 	public function openCoordsConfigForm(): CustomForm {
+		$chest_config = new Config(SkyBlock::getInstance()->getDataFolder() . "chest.json", Config::JSON);
+
 		return new CustomForm(
 			"Configuration - Coordonées", [
 			new Label("label", "Vous pouvez modifier les coordonées du §dpoint d'apparition §fpar défaut du coffre de départ"),
-			new Slider("x", "X", -256, 256),
-			new Slider("y", "Y", 0, 256),
-			new Slider("z", "Z", -256, 256),
-		], function (Player $player, CustomFormResponse $response): void {
-			$chest_config = new Config(SkyBlock::getInstance()->getDataFolder() . "chest.json", Config::JSON);
+			new Input("x", "X", -256, $chest_config->get("position")["x"]),
+			new Input("y", "Y", 0, $chest_config->get("position")["y"]),
+			new Input("z", "Z", -256, $chest_config->get("position")["z"]),
+		], function (Player $player, CustomFormResponse $response) use ($chest_config): void {
 			$chest_config->set("position", [
-				"x" => $response->getFloat("x"),
-				"y" => $response->getFloat("y"),
-				"z" => $response->getFloat("z")
+				"x" => $response->getString("x"),
+				"y" => $response->getString("y"),
+				"z" => $response->getString("z")
 			]);
-			$chest_config->save();
 
+			$chest_config->save();
 			$player->sendMessage(TextUtils::text("Les coordonées ont été sauvegardé, créer une île pour voir le nouveau point d'apparition"));
 		});
 	}
