@@ -13,6 +13,7 @@ use steellgold\skyblock\commands\subs\IslandAcceptCommand;
 use steellgold\skyblock\commands\subs\IslandKickCommand;
 use steellgold\skyblock\commands\subs\IslandNameCommand;
 use steellgold\skyblock\commands\subs\IslandRenameCommand;
+use steellgold\skyblock\commands\subs\IslandSetCommand;
 use steellgold\skyblock\commands\subs\IslandTeleportCommand;
 use steellgold\skyblock\player\SkyBlockPlayer;
 
@@ -27,6 +28,7 @@ class IslandCommand extends BaseCommand {
 		$this->registerSubCommand(new IslandAcceptCommand("accept", "Accept an invitation"));
 		$this->registerSubCommand(new IslandKickCommand("kick", "Kick a player from your island"));
 		$this->registerSubCommand(new IslandTeleportCommand("teleport", "Teleport to your island", ["tp", "join", "go"]));
+		$this->registerSubCommand(new IslandSetCommand("setspawn","Define the world spawnpoint of your island"));
 	}
 
 	/**
