@@ -44,12 +44,16 @@ class IslandCreateCommand extends BaseSubCommand {
 			function (Player $submitter, bool $choice) use ($player): void {
 				if ($choice) {
 					$uuid = (new UUID())->generate();
+
 					WorldUtils::duplicateWorld("copypaste", $uuid);
 					WorldUtils::renameWorld($uuid, $uuid);
 					$world = WorldUtils::getLoadedWorldByName($uuid);
 
+
 					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()], new Position(256, 71, 256, $world));
 					$island->create();
+
+					WorldUtils::placeChest($world, $island);
 					SkyBlockIsland::referenceIsland($island);
 
 					$player->setIsland($island);
