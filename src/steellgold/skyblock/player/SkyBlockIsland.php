@@ -25,10 +25,10 @@ final class SkyBlockIsland {
 	 * @param Position|null $spawn
 	 */
 	public function __construct(
-		private string $identifier,
-		private string $island_name,
-		private string $owner,
-		private array  $members,
+		private string    $identifier,
+		private string    $island_name,
+		private string    $owner,
+		private array     $members,
 		private ?Position $spawn
 	) {
 	}
@@ -44,9 +44,9 @@ final class SkyBlockIsland {
 			return null;
 		} else {
 			$data = $data->fetch_assoc();
-			$position = json_decode($data["position"]);
+			$position = json_decode($data["spawn"]);
 
-			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]),new Position(
+			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]), new Position(
 				$position["x"], $position["y"], $position["z"], WorldUtils::getWorldByNameNonNull($data["uuid"])
 			));
 			self::$islands[$island->getIdentifier()] = $island;
@@ -169,15 +169,20 @@ final class SkyBlockIsland {
 	}
 
 	public function create(): void {
-		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members, spawn) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '" . json_encode($this->members) . "')");
+		$position = ["x" => $this->spawn->x, "y" => $this->spawn->y, "z" => $this->spawn->z];
+		MySQL::mysqli()->query("INSERT INTO islands (uuid, island_name, owner, members, spawn) VALUES ('{$this->identifier}', '{$this->island_name}', '{$this->owner}', '" . json_encode($this->members) . "', '" . json_encode($position) . "')");
 	}
 
-	public function getWorld() : World {
+	public function getWorld(): World {
 		return WorldUtils::getWorldByNameNonNull($this->identifier);
+	}
+
+	public function getSpawn(): ?Position {
+		return $this->spawn;
 	}
 
 	public function setSpawn(Position $position) {
 		$this->getWorld()->setSpawnLocation($position->asVector3());
-		MySQL::updateIsland("position", );
+		MySQL::updateIsland("spawn", json_encode(["x" => $position->getX(), "y" => $position->getY(), "z" => $position->getZ()]), $this->getIdentifier());
 	}
 }
