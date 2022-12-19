@@ -37,6 +37,6 @@ class IslandAcceptCommand extends BaseSubCommand {
 		$session->setIsland($island);
 		$island->addMember($sender->getName());
 		// TODO: Add role
-		$sender->sendMessage(TextUtils::text("texte bienvenue.txt"));
+		$sender->sendMessage(TextUtils::text("Vous avez rejoint l'île de §d" . $island->getOwner() . " §f!"));
 	}
 }
