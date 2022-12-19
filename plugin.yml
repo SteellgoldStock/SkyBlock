@@ -2,7 +2,7 @@ name: SkyBlock
 main: steellgold\skyblock\SkyBlock
 version: 1.0.0
 authors:
-  - Steellgold
-  - Azalee
+  - Gaëtan (Steellgold)
 api: [4.0.0]
 description: SkyBlock plugin for PocketMine-MP
+website: https://www.steellgold.fr/
