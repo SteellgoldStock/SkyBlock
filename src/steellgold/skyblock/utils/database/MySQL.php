@@ -27,19 +27,20 @@ class MySQL {
 
 	public static function default(): void {
 		self::mysqli()->query("CREATE TABLE IF NOT EXISTS players (
-			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-			player VARCHAR(100),
-			island VARCHAR(100) DEFAULT null,
-    		last_kick JSON NOT NULL,
-			islands_bans JSON NOT NULL
+			id INT 			PRIMARY KEY NOT NULL AUTO_INCREMENT,
+			player 			VARCHAR(100),
+			island 			VARCHAR(100) DEFAULT null,
+    		last_kick 		JSON NOT NULL,
+			islands_bans 	JSON NOT NULL
 		)");
 
 		self::mysqli()->query("CREATE TABLE IF NOT EXISTS islands (
-			id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-			uuid VARCHAR(100) NOT NULL,
-    		island_name VARCHAR(100) NOT NULL,
-			owner VARCHAR(100) NOT NULL,
-			members JSON NOT NULL
+			id 				INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+			uuid 			VARCHAR(100) NOT NULL,
+    		island_name 	VARCHAR(100) NOT NULL,
+			owner 			VARCHAR(100) NOT NULL,
+			members 		JSON NOT NULL,
+    		spawn			JSON NOT NULL
 		)");
 	}
 
