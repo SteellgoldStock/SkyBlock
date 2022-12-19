@@ -11,8 +11,6 @@ use steellgold\skyblock\commands\IslandCommand;
 use steellgold\skyblock\listeners\PlayerListeners;
 use steellgold\skyblock\utils\database\MySQL;
 
-// FRANCE-MAROC 2-1 ?
-
 class SkyBlock extends PluginBase {
 
 	public static SkyBlock $instance;
