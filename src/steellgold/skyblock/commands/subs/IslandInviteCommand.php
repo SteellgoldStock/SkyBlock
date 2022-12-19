@@ -74,7 +74,7 @@ class IslandInviteCommand extends BaseSubCommand {
 
 			$session = SkyBlockPlayer::get($guest);
 			if ($session->hasIsland()) {
-				$player->sendMessage(TextUtils::error("Le joueur §f" . $guest->getName() . " §ca déjà une île."));
+				$player->sendMessage(TextUtils::error("Le joueur §f" . $guest->getName() . " §cà déjà une île."));
 				return;
 			}
 
@@ -84,8 +84,8 @@ class IslandInviteCommand extends BaseSubCommand {
 			}
 
 			Invites::addInvite($guest->getName(), $player->getName(), SkyBlockPlayer::get($player)->getIsland());
-			$player->sendMessage(TextUtils::text("Vous avez invité §f" . $guest->getName() . " §aà rejoindre votre île."));
-			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . "§f, tapez §d/island invites §fpour rejoindre."));
+			$player->sendMessage(TextUtils::text("Vous avez invité §d" . $guest->getName() . " §fà rejoindre votre île."));
+			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . "§f, tapez §d/island accept §fpour rejoindre."));
 		}, function (Player $player) use ($option): void {
 			$player->sendMessage(TextUtils::error("Vous avez annulé l'invitation."));
 		});
