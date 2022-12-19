@@ -45,24 +45,20 @@ class MySQL {
 	}
 
 	public static function removeIsland(string $uuid): void {
-		$mysqli = self::mysqli();
-		$mysqli->query("DELETE FROM islands WHERE uuid = '{$uuid}'");
+		self::mysqli()->query("DELETE FROM islands WHERE uuid = '{$uuid}'");
 	}
 
 	public static function updateIsland($column, $value, $uuid): void {
-		$mysqli = self::mysqli();
-		$mysqli->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
+		self::mysqli()->query("UPDATE islands SET {$column} = '{$value}' WHERE uuid = '{$uuid}'");
 	}
 
 	public static function islandExists(string $uuid): bool {
-		$mysqli = self::mysqli();
-		$data = $mysqli->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
+		$data = self::mysqli()->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
 		return $data->num_rows > 0;
 	}
 
 	public static function getIsland(string $uuid): ?array {
-		$mysqli = self::mysqli();
-		$data = $mysqli->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
+		$data = self::mysqli()->query("SELECT * FROM islands WHERE uuid = '{$uuid}'");
 		if (!$data) {
 			return null;
 		} else {
@@ -71,7 +67,6 @@ class MySQL {
 	}
 
 	public static function updatePlayer($column, $value, $player): void {
-		$mysqli = self::mysqli();
-		$mysqli->query("UPDATE players SET {$column} = '{$value}' WHERE player = '{$player}'");
+		self::mysqli()->query("UPDATE players SET {$column} = '{$value}' WHERE player = '{$player}'");
 	}
 }
