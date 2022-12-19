@@ -142,14 +142,12 @@ final class SkyBlockIsland {
 
 			$member->sendMessage(TextUtils::text($message));
 			$member->teleport(WorldUtils::getDefaultWorldNonNull()->getSpawnLocation());
-		} else {
-			MySQL::updatePlayer("last_kick", json_encode([
-				"keep_inventory" => $keep_inventory,
-				"keep_enderchest" => $keep_enderchest,
-				"keep_experience" => $keep_experience,
-				"message" => base64_encode($message),
-			]), $member);
-		}
+		} else MySQL::updatePlayer("last_kick", json_encode([
+			"keep_inventory" => $keep_inventory,
+			"keep_enderchest" => $keep_enderchest,
+			"keep_experience" => $keep_experience,
+			"message" => base64_encode($message),
+		]), $member);
 	}
 
 	/**

@@ -56,6 +56,12 @@ final class SkyBlockPlayer {
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
 				} else {
 					$kickinfos = json_decode($data["last_kick"], true);
+					if (!$kickinfos["keep_inventory"]) $player->getInventory()->clearAll();
+					if (!$kickinfos["keep_enderchest"]) $player->getEnderInventory()->clearAll();
+					if (!$kickinfos["keep_experience"]) {
+						$player->getXpManager()->setXpLevel(0);
+						$player->getXpManager()->setXpProgress(0);
+					}
 					$player->sendMessage(TextUtils::text(base64_decode($kickinfos["message"])));
 
 				}
