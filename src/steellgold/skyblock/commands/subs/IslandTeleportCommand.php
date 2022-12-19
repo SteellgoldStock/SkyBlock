@@ -24,6 +24,6 @@ class IslandTeleportCommand extends BaseSubCommand {
 			return;
 		}
 
-		$island = $session->getIsland();
+		$sender->teleport($session->getIsland()->getSpawn());
 	}
 }
