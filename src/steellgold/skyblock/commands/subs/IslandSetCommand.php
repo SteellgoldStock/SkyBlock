@@ -23,6 +23,7 @@ class IslandSetCommand extends BaseSubCommand {
 			return;
 		}
 
+		$sender->sendMessage(TextUtils::text("Vous venez de redéfinir le point d'apparition de votre île avec succès"));
 		$session->getIsland()->setSpawn($sender->getPosition());
 	}
 }
