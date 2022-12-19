@@ -39,7 +39,7 @@ class IslandKickCommand extends BaseSubCommand {
 
 		if (isset($args["player"])) {
 			if (IslandInviteCommand::checkIfSame($sender, $args["player"])){
-				$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
+				$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous expulser vous-même."));
 				return;
 			}
 		}
@@ -81,6 +81,11 @@ class IslandKickCommand extends BaseSubCommand {
 			}
 
 			$playerName = $players[$response->getInt("player")];
+			if ($playerName == $player->getName()) {
+				$player->sendMessage(TextUtils::error("Vous ne pouvez pas vous expulser vous même, transferez la propriété de l'île à quelqu'un ou supprimez celle-ci pour la quitter"));
+				return;
+			}
+
 			$guest = Server::getInstance()->getPlayerExact($playerName);
 			if (!$guest instanceof Player) {
 				$connected = false;
