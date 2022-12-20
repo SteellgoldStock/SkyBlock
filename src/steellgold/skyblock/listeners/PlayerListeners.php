@@ -15,6 +15,9 @@ class PlayerListeners implements Listener {
 	public function onPlayerJoin(PlayerJoinEvent $event) {
 		$player = $event->getPlayer();
 		$session = SkyBlockPlayer::get($player);
+
+		var_dump($session->getRole()->getName());
+		var_dump($session->getRole()->getPermissions());
 	}
 
 	/** @throws Exception */
