@@ -1,8 +1,8 @@
 <?php
 
-namespace steellgold\skyblock\player;
+namespace steellgold\skyblock\player\roles;
 
-class Officier extends Role {
+class SubChief extends Role {
 
 	public function getName(): string {
 		return "Officier";
