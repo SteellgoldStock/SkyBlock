@@ -29,13 +29,13 @@ class IslandRenameCommand extends BaseSubCommand {
 		if (!$sender instanceof Player) return;
 		$session = SkyBlockPlayer::get($sender);
 
-		if (!$session->getRole()->hasPermission(Role::PERMISSION_RENAME)) {
-			$sender->sendMessage(TextUtils::error(TextUtils::getNoPermissionMessage(Chief::class)));
+		if (!$session->hasIsland()) {
+			$sender->sendMessage(TextUtils::error("Vous n'avez pas d'île, créez une avant de pouvoir la renommer."));
 			return;
 		}
 
-		if (!$session->hasIsland()) {
-			$sender->sendMessage(TextUtils::error("Vous n'avez pas d'île, créez une avant de pouvoir la renommer."));
+		if (!$session->getRole()->hasPermission(Role::PERMISSION_RENAME)) {
+			$sender->sendMessage(TextUtils::error(TextUtils::getNoPermissionMessage(Chief::class)));
 			return;
 		}
 
