@@ -25,6 +25,15 @@ use Webmozart\PathUtil\Path;
  */
 class WorldUtils {
 
+	const SIDES = [
+		0 => 3,
+		1 => 2,
+		2 => 4,
+		3 => 5
+	];
+
+	const DEFAULT_COPY = "copypaste";
+
 	public static function removeWorld(string $name): int {
 		if (Server::getInstance()->getWorldManager()->isWorldLoaded($name)) {
 			$world = WorldUtils::getWorldByNameNonNull($name);
@@ -179,7 +188,6 @@ class WorldUtils {
 	 * Not come from multiworld
 	 */
 	public static function isWorldExist(string $name): bool {
-		var_dump(Path::join(Server::getInstance()->getDataPath(), "worlds", $name));
 		return is_dir(Path::join(Server::getInstance()->getDataPath(), "worlds", $name));
 	}
 
@@ -188,7 +196,7 @@ class WorldUtils {
 		$positions = $chest_config->get("position");
 
 		$world->orderChunkPopulation($positions["x"] >> 4, $positions["z"] >> 4, null)->onCompletion(function (Chunk $chunk) use ($world, $chest_config, $positions): void {
-			$world->setBlockAt($positions["x"], $positions["y"], $positions["z"], VanillaBlocks::CHEST()->setFacing(3));
+			$world->setBlockAt($positions["x"], $positions["y"], $positions["z"], VanillaBlocks::CHEST()->setFacing($positions["side"]));
 			$tile = $world->getTileAt($positions["x"], $positions["y"], $positions["z"]);
 
 			if ($tile instanceof Chest) {
