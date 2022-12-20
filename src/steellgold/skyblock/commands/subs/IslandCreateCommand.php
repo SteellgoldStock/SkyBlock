@@ -11,6 +11,7 @@ use pocketmine\player\Player;
 use pocketmine\world\Position;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
+use steellgold\skyblock\SkyBlock;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\UUID;
 use steellgold\skyblock\utils\WorldUtils;
@@ -45,7 +46,9 @@ class IslandCreateCommand extends BaseSubCommand {
 				if ($choice) {
 					$uuid = (new UUID())->generate();
 
-					WorldUtils::duplicateWorld("copypaste", $uuid);
+					$defaultworld = SkyBlock::getInstance()->getConfig();
+
+					WorldUtils::duplicateWorld(WorldUtils::DEFAULT_COPY, $uuid);
 					WorldUtils::renameWorld($uuid, $uuid);
 					$world = WorldUtils::getLoadedWorldByName($uuid);
 
