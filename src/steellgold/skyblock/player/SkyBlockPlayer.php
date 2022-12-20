@@ -4,6 +4,7 @@ namespace steellgold\skyblock\player;
 
 use Exception;
 use pocketmine\player\Player;
+use steellgold\skyblock\player\roles\Role;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\WorldUtils;
@@ -20,6 +21,7 @@ final class SkyBlockPlayer {
 	public function __construct(
 		private string          $name,
 		private ?SkyBlockIsland $island,
+		private ?Role           $role,
 		private array           $lastKick,
 		private array           $islandsBans
 	) {
@@ -42,7 +44,7 @@ final class SkyBlockPlayer {
 	private static function loadSessionData(Player $player): SkyBlockPlayer {
 		if (!$player->hasPlayedBefore()) {
 			$base = json_encode([]);
-			MySQL::mysqli()->query("INSERT INTO players (player, island, last_kick, islands_bans) VALUES ('{$player->getName()}', 'null', '{$base}', '{$base}')");
+			MySQL::mysqli()->query("INSERT INTO players (player, island, role, last_kick, islands_bans) VALUES ('{$player->getName()}', 'null', 'Visitor', '{$base}', '{$base}')");
 		}
 
 		$data = MySQL::mysqli()->query("SELECT * FROM players WHERE player = '{$player->getName()}'")->fetch_assoc();
@@ -51,7 +53,7 @@ final class SkyBlockPlayer {
 		$island = null;
 
 		if ($data["island"] !== "null") {
-			if (MySQL::islandExists($data["island"]) AND WorldUtils::isWorldExist($data["island"])) {
+			if (MySQL::islandExists($data["island"]) and WorldUtils::isWorldExist($data["island"])) {
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
@@ -75,7 +77,7 @@ final class SkyBlockPlayer {
 		}
 
 		MySQL::updatePlayer("island", $island?->getIdentifier() ?? "null", $player->getName());
-		return new SkyBlockPlayer($player->getName(), $island, json_decode($data["last_kick"], true), json_decode($data["islands_bans"], true));
+		return new SkyBlockPlayer($player->getName(), $island, Role::toRole($data["role"]), json_decode($data["last_kick"], true), json_decode($data["islands_bans"], true));
 	}
 
 	/** @return string */
@@ -104,6 +106,14 @@ final class SkyBlockPlayer {
 
 	public function hasIsland(): bool {
 		return $this->island !== null;
+	}
+
+	public function getRole(): ?Role {
+		return $this->role;
+	}
+
+	public function setRole(?Role $role): void {
+		$this->role = $role;
 	}
 
 	/**
