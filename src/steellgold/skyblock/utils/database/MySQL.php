@@ -67,6 +67,15 @@ class MySQL {
 		}
 	}
 
+	public static function getIslandMembersByRole(string $uuid, string $role): array {
+		$data = self::mysqli()->query("SELECT player FROM players WHERE uuid = '{$uuid}' AND role = '{$role}'");
+		if (!$data) {
+			return [];
+		} else {
+			return $data->fetch_all();
+		}
+	}
+
 	public static function updatePlayer($column, $value, $player): void {
 		self::mysqli()->query("UPDATE players SET {$column} = '{$value}' WHERE player = '{$player}'");
 	}
