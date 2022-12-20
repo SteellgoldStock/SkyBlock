@@ -30,6 +30,7 @@ class MySQL {
 			id INT 			PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			player 			VARCHAR(100),
 			island 			VARCHAR(100) DEFAULT null,
+    		role 			VARCHAR(15) NOT NULL,
     		last_kick 		JSON NOT NULL,
 			islands_bans 	JSON NOT NULL
 		)");
