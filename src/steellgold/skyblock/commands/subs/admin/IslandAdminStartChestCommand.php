@@ -1,0 +1,92 @@
+<?php
+
+namespace steellgold\skyblock\commands\subs\admin;
+
+use CortexPE\Commando\BaseSubCommand;use dktapps\pmforms\CustomForm;use dktapps\pmforms\CustomFormResponse;use dktapps\pmforms\element\Dropdown;use dktapps\pmforms\element\Input;use dktapps\pmforms\element\Label;use dktapps\pmforms\FormIcon;use dktapps\pmforms\MenuForm;use dktapps\pmforms\MenuOption;use muqsit\invmenu\InvMenu;use muqsit\invmenu\type\InvMenuTypeIds;use pocketmine\command\CommandSender;use pocketmine\inventory\Inventory;use pocketmine\item\Item;use pocketmine\player\Player;use pocketmine\Server;use pocketmine\utils\Config;use steellgold\skyblock\SkyBlock;use steellgold\skyblock\utils\TextUtils;use steellgold\skyblock\utils\WorldUtils;
+
+class IslandAdminStartChestCommand extends BaseSubCommand {
+
+	protected function prepare(): void {
+		// TODO: Implement prepare() method.
+	}
+
+	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
+		if (!$sender instanceof Player) return;
+		if (!Server::getInstance()->isOp($sender->getName())) {
+			$sender->sendMessage(TextUtils::error("Vous devez être opérateur pour utiliser cette commande"));
+			return;
+		}
+
+		$sender->sendForm($this->openConfigForm());
+	}
+
+	public function openConfigForm(): MenuForm {
+		return new MenuForm(
+			"Configuration",
+			"Vous êtes actuellement sur l'interface de configuration du coffre de départ qui apparait lors de la création d'une île", [
+			new MenuOption("Ouvrir (lecture-seule)", new FormIcon("textures/items/book_normal", FormIcon::IMAGE_TYPE_PATH)),
+			new MenuOption("Ouvrir (lecture-écriture)", new FormIcon("textures/items/book_writable", FormIcon::IMAGE_TYPE_PATH)),
+			new MenuOption("Modifier les coordonées d'apparition", new FormIcon("textures/items/compass_item", FormIcon::IMAGE_TYPE_PATH))
+		],
+			function (Player $player, int $selectedOption): void {
+				$menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST)->setName("Coffre de départ");
+				$chest_config = new Config(SkyBlock::getInstance()->getDataFolder() . "chest.json", Config::JSON);
+
+				$i = 0;
+				foreach (json_decode(base64_decode($chest_config->get("content")), true) as $item) {
+					$menu->getInventory()->setItem($i, Item::jsonDeserialize($item));
+					$i++;
+				}
+
+				switch ($selectedOption) {
+					case 0:
+						$menu->setListener(InvMenu::readonly());
+						$menu->send($player);
+						break;
+					case 1:
+						$menu->setInventoryCloseListener(function (Player $player, Inventory $inventory) use ($chest_config): void {
+							$content = $inventory->getContents(true);
+							$chest_config->set("content", base64_encode(json_encode($content)));
+							$chest_config->save();
+
+							$player->sendMessage(TextUtils::text("L'inventaire a été sauvegardé, créer une île pour voir les changements"));
+						});
+						$menu->send($player);
+						break;
+					case 2:
+						$player->sendForm($this->openCoordsConfigForm());
+						break;
+				}
+			}
+		);
+	}
+
+	public function openCoordsConfigForm(): CustomForm {
+		$chest_config = new Config(SkyBlock::getInstance()->getDataFolder() . "chest.json", Config::JSON);
+
+		return new CustomForm(
+			"Configuration - Coordonées", [
+			new Label("label", "Vous pouvez modifier les coordonées du §dpoint d'apparition §fpar défaut du coffre de départ"),
+			new Input("x", "X", -256, $chest_config->get("position")["x"]),
+			new Input("y", "Y", 0, $chest_config->get("position")["y"]),
+			new Input("z", "Z", -256, $chest_config->get("position")["z"]),
+			new Dropdown("side", "Face du bloc", [
+				"Face à droite",
+				"Face à gauche",
+				"Face à l'avant",
+				"Face à l'arrière"
+			])
+		], function (Player $player, CustomFormResponse $response) use ($chest_config): void {
+			$chest_config->set("position", [
+				"x" => $response->getString("x"),
+				"y" => $response->getString("y"),
+				"z" => $response->getString("z"),
+				"side" => WorldUtils::SIDES[$response->getInt("side")]
+			]);
+			$chest_config->save();
+
+
+			$player->sendMessage(TextUtils::text("Les coordonées ont été sauvegardé, créer une île pour voir le nouveau point d'apparition"));
+		});
+	}
+}
