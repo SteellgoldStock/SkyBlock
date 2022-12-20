@@ -18,6 +18,7 @@ class PlayerListeners implements Listener {
 
 		var_dump($session->getRole()->getName());
 		var_dump($session->getRole()->getPermissions());
+		var_dump($session->getIsland()->getMembers());
 	}
 
 	/** @throws Exception */
