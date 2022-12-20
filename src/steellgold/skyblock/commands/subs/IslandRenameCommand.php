@@ -10,6 +10,8 @@ use dktapps\pmforms\element\Label;
 use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
+use steellgold\skyblock\player\roles\Chief;
+use steellgold\skyblock\player\roles\Role;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\SkyBlock;
 use steellgold\skyblock\utils\TextUtils;
@@ -26,6 +28,11 @@ class IslandRenameCommand extends BaseSubCommand {
 	public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 		if (!$sender instanceof Player) return;
 		$session = SkyBlockPlayer::get($sender);
+
+		if (!$session->getRole()->hasPermission(Role::PERMISSION_RENAME)) {
+			$sender->sendMessage(TextUtils::error(TextUtils::getNoPermissionMessage(Chief::)));
+			return;
+		}
 
 		if (!$session->hasIsland()) {
 			$sender->sendMessage(TextUtils::error("Vous n'avez pas d'île, créez une avant de pouvoir la renommer."));
