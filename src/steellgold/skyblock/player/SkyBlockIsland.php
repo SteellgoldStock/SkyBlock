@@ -8,6 +8,7 @@ use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\world\Position;
 use pocketmine\world\World;
+use steellgold\skyblock\player\roles\Role;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\WorldUtils;
@@ -114,8 +115,8 @@ final class SkyBlockIsland {
 	 * @param string|Player $member
 	 * @return void
 	 */
-	public function addMember(string|Player $member): void {
-		$this->members[] = ($member instanceof Player ? $member->getName() : $member);
+	public function addMember(string|Player $member, Role $role): void {
+		$this->members[] = [($member instanceof Player ? $member->getName() : $member) => $role->getName()];
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
