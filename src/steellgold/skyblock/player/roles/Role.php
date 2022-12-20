@@ -3,6 +3,15 @@
 namespace steellgold\skyblock\player\roles;
 
 abstract class Role {
+
+	const ROLES = [
+		0 => Chief::class,
+		1 => SubChief::class,
+		2 => Assistant::class,
+		3 => Member::class,
+		4 => Visitor::class
+	];
+
 	const PERMISSION_KICK = "skyblock.command.kick_all"; // It can exclude any person of any rank
 	const PERMISSION_KICK_VISITOR = "skyblock.command.kick_visitors";
 	const PERMISSION_KICK_MEMBER = "skyblock.command.kick_members";
@@ -27,13 +36,13 @@ abstract class Role {
 		return in_array("*", $this->getPermissions()) || in_array($permission, $this->getPermissions());
 	}
 
-	public function getRankByString(string $name): Role {
-		return match (strtolower($name)) {
-			"member" => new Member(),
-			"assistant" => new Assistant(),
-			"officer" | "subchief" => new SubChief(),
-			"owner" | "*" | "chief" => new Chief(),
-			default => new Visitor(),
+	public static function toRole(string $role): Role {
+		return match ($role) {
+			"Chief" => new Chief(),
+			"SubChief" => new SubChief(),
+			"Assistant" => new Assistant(),
+			"Member" => new Member(),
+			default => new Visitor()
 		};
 	}
 }

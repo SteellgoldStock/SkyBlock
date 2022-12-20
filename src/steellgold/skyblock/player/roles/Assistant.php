@@ -4,6 +4,8 @@ namespace steellgold\skyblock\player\roles;
 
 class Assistant extends Role {
 
+	const ASSISTANT = "Assistant";
+
 	public function getName(): string {
 		return "Assistant";
 	}

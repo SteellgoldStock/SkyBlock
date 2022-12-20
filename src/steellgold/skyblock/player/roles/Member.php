@@ -4,6 +4,8 @@ namespace steellgold\skyblock\player\roles;
 
 class Member extends Role {
 
+	const MEMBER = "Membre";
+
 	public function getName(): string {
 		return "Membre";
 	}

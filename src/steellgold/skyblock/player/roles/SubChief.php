@@ -4,6 +4,8 @@ namespace steellgold\skyblock\player\roles;
 
 class SubChief extends Role {
 
+	const SUB_CHIEF = "Sous-chef";
+
 	public function getName(): string {
 		return "Officier";
 	}
