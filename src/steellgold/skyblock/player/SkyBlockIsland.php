@@ -16,7 +16,6 @@ final class SkyBlockIsland {
 
 	public static array $islands = [];
 
-
 	/**
 	 * @param string $identifier
 	 * @param string $island_name
