@@ -7,7 +7,10 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\player\Player;
+use pocketmine\Server;
 use steellgold\skyblock\player\SkyBlockPlayer;
+use steellgold\skyblock\utils\TextUtils;
 
 class PlayerListeners implements Listener {
 
@@ -16,9 +19,12 @@ class PlayerListeners implements Listener {
 		$player = $event->getPlayer();
 		$session = SkyBlockPlayer::get($player);
 
-		var_dump($session->getRole()->getName());
-		var_dump($session->getRole()->getPermissions());
-		var_dump($session->getIsland()->getMembers());
+		foreach ($session->getIsland()->getMembers() as $member) {
+			$connected = Server::getInstance()->getPlayerExact($member);
+			if ($connected instanceof Player) {
+				$connected->sendMessage(TextUtils::PREFIX . "Le membre §d" . $player->getName() . " §f(§d" . $session->getRole()->getName() . "§f) c'est connecté");
+			}
+		}
 	}
 
 	/** @throws Exception */
