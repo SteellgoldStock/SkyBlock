@@ -13,9 +13,9 @@ class TextUtils {
 	const FORM_TITLE_MODAL = "SkyBlock";
 
 	public static function getNoPermissionMessage($class = null): string {
-		$exact = Role::getClass($class);
+		$exact = Role::getFromClass($class);
 		if ($exact == null) return "Vous n'avez pas la permission d'exécuter cette commande.";
-		return "Vous n'avez pas la permission d'exécuter cette commande. Vous devez être §f{$exact->getName()} §cou plus.";
+		return "Vous n'avez pas la permission d'exécuter cette commande. Vous devez être §c{$exact->getName()} §fou plus.";
 	}
 
 	public static function text(string $text): string {
