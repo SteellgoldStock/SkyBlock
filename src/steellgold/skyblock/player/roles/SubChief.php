@@ -19,7 +19,9 @@ class SubChief extends Role {
 			self::PERMISSION_BAN,
 			self::PERMISSION_KICK_ASSISTANT,
 			self::PERMISSION_KICK_MEMBER,
-			self::PERMISSION_KICK_VISITOR
+			self::PERMISSION_KICK_VISITOR,
+
+			self::PERMISSION_RENAME
 		];
 	}
 
