@@ -5,6 +5,7 @@ namespace steellgold\skyblock\player;
 use Exception;
 use pocketmine\player\Player;
 use steellgold\skyblock\player\roles\Role;
+use steellgold\skyblock\player\roles\Visitor;
 use steellgold\skyblock\utils\database\MySQL;
 use steellgold\skyblock\utils\TextUtils;
 use steellgold\skyblock\utils\WorldUtils;
@@ -54,7 +55,6 @@ final class SkyBlockPlayer {
 
 		if ($data["island"] !== "null") {
 			if (MySQL::islandExists($data["island"]) and WorldUtils::isWorldExist($data["island"])) {
-				var_dump(json_decode(MySQL::getIsland($data["island"])["members"]));
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
@@ -75,10 +75,18 @@ final class SkyBlockPlayer {
 		if ($island === null) {
 			$player->teleport($player->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
 			$player->getInventory()->clearAll();
+			$player->getEnderInventory()->clearAll();
+			$player->getXpManager()->setXpLevel(0);
+			$player->getXpManager()->setXpProgress(0);
+
+			$role = Role::getFromClass(Visitor::class);
+		} else {
+			$role = Role::toRole($data["role"]);
 		}
 
 		MySQL::updatePlayer("island", $island?->getIdentifier() ?? "null", $player->getName());
-		return new SkyBlockPlayer($player->getName(), $island, Role::toRole($data["role"]), json_decode($data["last_kick"], true), json_decode($data["islands_bans"], true));
+		MySQL::updatePlayer("role", $role->getIdentifier(), $player->getName());
+		return new SkyBlockPlayer($player->getName(), $island, $role, json_decode($data["last_kick"], true), json_decode($data["islands_bans"], true));
 	}
 
 	/** @return string */
@@ -92,8 +100,8 @@ final class SkyBlockPlayer {
 
 	/** @param SkyBlockIsland|null $island */
 	public function setIsland(?SkyBlockIsland $island): void {
-		MySQL::updatePlayer("island", $island === null ? "null" : $island->getIdentifier(), $this->getName());
 		$this->island = $island;
+		MySQL::updatePlayer("island", $island === null ? "null" : $island->getIdentifier(), $this->getName());
 	}
 
 	/** @return SkyBlockIsland|null */
@@ -114,7 +122,8 @@ final class SkyBlockPlayer {
 	}
 
 	public function setRole(?Role $role): void {
-		$this->role = $role;
+		$this->role = ($role == null ? "Visitor" : $role);
+		MySQL::updatePlayer("role", $role->getIdentifier(), $this->getName());
 	}
 
 	/**

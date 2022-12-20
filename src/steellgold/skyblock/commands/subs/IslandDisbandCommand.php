@@ -7,6 +7,8 @@ use dktapps\pmforms\ModalForm;
 use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
+use steellgold\skyblock\player\roles\Role;
+use steellgold\skyblock\player\roles\Visitor;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\database\MySQL;
@@ -43,6 +45,7 @@ class IslandDisbandCommand extends BaseSubCommand {
 				if ($choice) {
 					WorldUtils::lazyUnloadWorld($island->getIdentifier());
 					WorldUtils::removeWorld($island->getIdentifier());
+					$player->setRole(Role::getFromClass(Visitor::class));
 					$player->setIsland(null);
 
 					MySQL::removeIsland($island->getIdentifier());
