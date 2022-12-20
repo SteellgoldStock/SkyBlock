@@ -1,6 +1,6 @@
 <?php
 
-namespace steellgold\skyblock\player;
+namespace steellgold\skyblock\player\roles;
 
 abstract class Role {
 	const PERMISSION_KICK = "skyblock.command.kick_all"; // It can exclude any person of any rank
@@ -25,5 +25,15 @@ abstract class Role {
 
 	public function hasPermission(string $permission): bool {
 		return in_array("*", $this->getPermissions()) || in_array($permission, $this->getPermissions());
+	}
+
+	public function getRankByString(string $name): Role {
+		return match (strtolower($name)) {
+			"member" => new Member(),
+			"assistant" => new Assistant(),
+			"officer" | "subchief" => new SubChief(),
+			"owner" | "*" | "chief" => new Chief(),
+			default => new Visitor(),
+		};
 	}
 }

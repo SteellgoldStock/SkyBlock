@@ -1,6 +1,6 @@
 <?php
 
-namespace steellgold\skyblock\player;
+namespace steellgold\skyblock\player\roles;
 
 class Member extends Role {
 
