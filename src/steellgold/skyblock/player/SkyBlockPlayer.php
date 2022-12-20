@@ -54,6 +54,7 @@ final class SkyBlockPlayer {
 
 		if ($data["island"] !== "null") {
 			if (MySQL::islandExists($data["island"]) and WorldUtils::isWorldExist($data["island"])) {
+				var_dump(json_decode(MySQL::getIsland($data["island"])["members"]));
 				if (in_array($player->getName(), json_decode(MySQL::getIsland($data["island"])["members"]))) {
 					$island = SkyBlockIsland::loadIslandSession($data["island"]);
 					$player->sendMessage(TextUtils::text("Votre île a été chargée avec succès ! §c(message factice)"));
