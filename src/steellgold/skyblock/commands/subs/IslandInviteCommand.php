@@ -13,6 +13,7 @@ use Exception;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use steellgold\skyblock\player\roles\Role;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\utils\Invites;
 use steellgold\skyblock\utils\TextUtils;
@@ -38,9 +39,11 @@ class IslandInviteCommand extends BaseSubCommand {
 			return;
 		}
 
-		if (self::checkIfSame($sender, $args["player"])){
-			$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
-			return;
+		if (isset($args["player"])) {
+			if (self::checkIfSame($sender, $args["player"])){
+				$sender->sendMessage(TextUtils::error("Vous ne pouvez pas vous inviter vous-même."));
+				return;
+			}
 		}
 
 		$sender->sendForm($this->invitePlayerForm($args["player"] ?? null));
@@ -59,7 +62,7 @@ class IslandInviteCommand extends BaseSubCommand {
 		return new CustomForm("Inviter un joueur", [
 			new Label("info", "Choisissez un joueur à inviter, il devra accepter votre invitation pour rejoindre votre île. \n§d» §fElle sera automatiquement refusée si le joueur ce déconnecte, ou n'est pas acceptée dans la minute qui viens."),
 			new Dropdown("player", "Choisissez un joueur à inviter", $players, $f),
-			new Dropdown("role", "Choisissez le rôle du joueur", ["Sous-Chef", "Assistants", "Membre"], 2)
+			new Dropdown("role", "Choisissez le rôle du joueur", ["Officier", "Assistant", "Membre"], 2)
 		], function (Player $player, CustomFormResponse $response) use ($option, $players): void {
 			$guest = Server::getInstance()->getPlayerExact($players[$response->getInt("player")]);
 			if (!$guest instanceof Player) {
@@ -83,9 +86,10 @@ class IslandInviteCommand extends BaseSubCommand {
 				return;
 			}
 
-			Invites::addInvite($guest->getName(), $player->getName(), SkyBlockPlayer::get($player)->getIsland());
-			$player->sendMessage(TextUtils::text("Vous avez invité §d" . $guest->getName() . " §fà rejoindre votre île."));
-			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . "§f, tapez §d/island accept §fpour rejoindre."));
+			$role = Role::getFromClass(Role::ROLES[($response->getInt("role") + 1)]);
+			Invites::addInvite($guest->getName(), $player->getName(), SkyBlockPlayer::get($player)->getIsland(), $role);
+			$player->sendMessage(TextUtils::text("Vous avez invité §d" . $guest->getName() . " §fà rejoindre votre île, en tant que §d" . $role->getName()));
+			$guest->sendMessage(TextUtils::text("Vous avez été invité à rejoindre l'île de §d" . $player->getName() . " §fen tant que §d". $role->getName() . "§f, tapez §d/island accept §fpour rejoindre."));
 		}, function (Player $player) use ($option): void {
 			$player->sendMessage(TextUtils::error("Vous avez annulé l'invitation."));
 		});

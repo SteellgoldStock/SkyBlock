@@ -2,6 +2,7 @@
 
 namespace steellgold\skyblock\utils;
 
+use steellgold\skyblock\player\roles\Role;
 use steellgold\skyblock\player\SkyBlockIsland;
 
 class Invites {
@@ -12,13 +13,15 @@ class Invites {
 	 * @param string $player
 	 * @param string $inviter
 	 * @param SkyBlockIsland $island
+	 * @param Role $role
 	 * @return void
 	 */
-	public static function addInvite(string $player, string $inviter, SkyBlockIsland $island): void {
+	public static function addInvite(string $player, string $inviter, SkyBlockIsland $island, Role $role): void {
 		self::$invites[$player] = [
 			"inviter" => $inviter,
 			"expire_at" => time() + 60,
-			"island" => $island
+			"island" => $island,
+			"role" => $role
 		];
 	}
 
