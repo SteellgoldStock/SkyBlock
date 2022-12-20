@@ -1,8 +1,8 @@
 <?php
 
-namespace steellgold\skyblock\player;
+namespace steellgold\skyblock\player\roles;
 
-class Owner extends Role {
+class Chief extends Role {
 
 	public function getName(): string {
 		return "Chef";
