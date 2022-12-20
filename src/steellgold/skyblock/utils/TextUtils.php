@@ -2,6 +2,8 @@
 
 namespace steellgold\skyblock\utils;
 
+use steellgold\skyblock\player\roles\Role;
+
 class TextUtils {
 
 	const PREFIX = "§dSkyBlock §f» ";
@@ -10,8 +12,9 @@ class TextUtils {
 	const FORM_TITLE = "§d- SkyBlock -";
 	const FORM_TITLE_MODAL = "SkyBlock";
 
-	public static function getNoPermissionMessage(): string {
-		return self::PREFIX . "§cVous n'avez pas la permission d'utiliser cette commande.";
+	public static function getNoPermissionMessage(?Role $role = null): string {
+		if ($role === null) return "Vous n'avez pas la permission d'exécuter cette commande.";
+		return "Vous n'avez pas la permission d'exécuter cette commande. Vous devez être §f{$role->getName()} §cou plus.";
 	}
 
 	public static function text(string $text): string {
