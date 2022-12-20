@@ -12,9 +12,10 @@ class TextUtils {
 	const FORM_TITLE = "§d- SkyBlock -";
 	const FORM_TITLE_MODAL = "SkyBlock";
 
-	public static function getNoPermissionMessage(?Role $role = null): string {
-		if ($role === null) return "Vous n'avez pas la permission d'exécuter cette commande.";
-		return "Vous n'avez pas la permission d'exécuter cette commande. Vous devez être §f{$role->getName()} §cou plus.";
+	public static function getNoPermissionMessage($class = null): string {
+		$exact = Role::getClass($class);
+		if ($exact == null) return "Vous n'avez pas la permission d'exécuter cette commande.";
+		return "Vous n'avez pas la permission d'exécuter cette commande. Vous devez être §f{$exact->getName()} §cou plus.";
 	}
 
 	public static function text(string $text): string {
