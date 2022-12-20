@@ -31,6 +31,12 @@ final class SkyBlockIsland {
 		private array     $members,
 		private ?Position $spawn
 	) {
+		if (!isset(self::$islands[$this->identifier])) {
+			self::referenceIsland($this);
+			Server::getInstance()->getLogger()->info("L'île (" . $this->identifier . ") viens d'être referencé");
+		}else{
+			Server::getInstance()->getLogger()->info("L'île (" . $this->identifier . ") est déjà chargé, elle n'a pas besoins d'être referencé");
+		}
 	}
 
 	/**
@@ -50,11 +56,9 @@ final class SkyBlockIsland {
 			if ($loaded) Server::getInstance()->getLogger()->info("Island {$data["uuid"]} was loaded successfully !");
 			else Server::getInstance()->getLogger()->info("Island {$data["uuid"]} was not loaded successfully !");
 
-			$island = new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]), new Position(
+			return self::$islands[$data["uuid"]] ?? new SkyBlockIsland($data["uuid"], $data["island_name"], $data["owner"], json_decode($data["members"]), new Position(
 				$position["x"], $position["y"], $position["z"], WorldUtils::getWorldByNameNonNull($data["uuid"])
 			));
-			self::$islands[$island->getIdentifier()] = $island;
-			return $island;
 		}
 	}
 
