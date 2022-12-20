@@ -116,7 +116,7 @@ final class SkyBlockIsland {
 	 * @return void
 	 */
 	public function addMember(string|Player $member, Role $role): void {
-		$this->members[] = [($member instanceof Player ? $member->getName() : $member) => $role->getName()];
+		$this->members[] = [($member instanceof Player ? $member->getName() : $member) => $role->getIdentifier()];
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
@@ -125,8 +125,10 @@ final class SkyBlockIsland {
 	 * @return void
 	 */
 	public function removeMember(string|Player $member): void {
+		$player = ($member instanceof Player ? $member->getName() : $member);
 		$this->members = array_diff($this->members, [($member instanceof Player ? $member->getName() : $member)]);
-		MySQL::updatePlayer("island", "null", ($member instanceof Player ? $member->getName() : $member));
+		MySQL::updatePlayer("island", "null", $player);
+		MySQL::updatePlayer("role", "Visitor", $player);
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
