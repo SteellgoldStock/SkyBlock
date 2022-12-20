@@ -96,9 +96,7 @@ final class SkyBlockIsland {
 		return $this->owner;
 	}
 
-	/**
-	 * @param string|Player $owner
-	 */
+	/** @param string|Player $owner */
 	public function setOwner(string|Player $owner): void {
 		$m = $owner instanceof Player ? $owner->getName() : $owner;
 		MySQL::updateIsland("owner", $m, $this->identifier);
@@ -119,8 +117,8 @@ final class SkyBlockIsland {
 	 * @param string|Player $member
 	 * @return void
 	 */
-	public function addMember(string|Player $member, Role $role): void {
-		$this->members[] = [($member instanceof Player ? $member->getName() : $member) => $role->getIdentifier()];
+	public function addMember(string|Player $member): void {
+		$this->members[] = ($member instanceof Player ? $member->getName() : $member);
 		MySQL::updateIsland("members", json_encode($this->members), $this->identifier);
 	}
 
