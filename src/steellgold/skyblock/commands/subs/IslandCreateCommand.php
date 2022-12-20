@@ -9,6 +9,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\Position;
+use steellgold\skyblock\player\roles\Chief;
 use steellgold\skyblock\player\SkyBlockIsland;
 use steellgold\skyblock\player\SkyBlockPlayer;
 use steellgold\skyblock\SkyBlock;
@@ -53,8 +54,9 @@ class IslandCreateCommand extends BaseSubCommand {
 					$world = WorldUtils::getLoadedWorldByName($uuid);
 
 
-					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [$submitter->getName()], new Position(256, 71, 256, $world));
+					$island = new SkyBlockIsland($uuid, $submitter->getName(), $submitter->getName(), [], new Position(256, 71, 256, $world));
 					$island->create();
+					$island->addMember($submitter->getName(), new Chief());
 
 					WorldUtils::placeChest($world, $island);
 					SkyBlockIsland::referenceIsland($island);
