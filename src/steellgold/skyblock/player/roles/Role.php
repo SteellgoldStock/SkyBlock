@@ -28,7 +28,20 @@ abstract class Role {
 	const PERMISSION_PLACE_BLOCKS = "skyblock.access.placeblocks";
 	const PERMISSION_OPEN_ALL_CHESTS = "skyblock.access.openallchests";
 
+	public static function getClass($class = null): Visitor|Member|SubChief|Assistant|Chief|null {
+		if ($class === null) return null;
+		return match ($class) {
+			Chief::class => new Chief(),
+			SubChief::class => new SubChief(),
+			Assistant::class => new Assistant(),
+			Member::class => new Member(),
+			default => new Visitor()
+		};
+	}
+
 	abstract public function getName(): string;
+
+	abstract public function getIdentifier(): string;
 
 	abstract public function getPermissions(): array;
 

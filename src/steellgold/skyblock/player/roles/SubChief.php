@@ -22,4 +22,8 @@ class SubChief extends Role {
 			self::PERMISSION_KICK_VISITOR
 		];
 	}
+
+	public function getIdentifier(): string {
+		return "SubChief";
+	}
 }

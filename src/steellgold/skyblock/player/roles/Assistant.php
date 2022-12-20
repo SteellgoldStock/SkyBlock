@@ -20,4 +20,8 @@ class Assistant extends Role {
 			self::PERMISSION_PLACE_BLOCKS
 		];
 	}
+
+	public function getIdentifier(): string {
+		return "Assistant";
+	}
 }

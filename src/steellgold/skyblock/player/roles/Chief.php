@@ -15,4 +15,8 @@ class Chief extends Role {
 			"*"
 		];
 	}
+
+	public function getIdentifier(): string {
+		return "Chief";
+	}
 }

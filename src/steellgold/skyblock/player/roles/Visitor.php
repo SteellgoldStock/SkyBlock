@@ -13,4 +13,8 @@ class Visitor extends Role {
 	public function getPermissions(): array {
 		return [];
 	}
+
+	public function getIdentifier(): string {
+		return "Visitor";
+	}
 }
